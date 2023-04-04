@@ -14,6 +14,8 @@ class Display : /*public Observer*/ {
         friend std::ostream &operator<<(std::ostream &out, const Display &dis);
 };
 
+//test
+
 
 
 #endif
