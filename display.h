@@ -2,11 +2,11 @@
 #define DISPLAY_H
 #include <vector>
 #include <fstream>
-//#include "observer.h"
+#include "observer.h"
 
 class Subject;
 
-class Display : /*public Observer*/ {
+class Display : public Observer {
         std::vector<std::vector<char>> text;
     public:
         Display();
