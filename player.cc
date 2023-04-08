@@ -1,5 +1,6 @@
 #include "player.h"
 #include <vector>
+#include <string>
 using namespace std;
 
 class Academic;
@@ -7,7 +8,7 @@ class Residence;
 class Gym;
 
 // new player construction
-Player::Player(char p): money{0}, square{0}, timsCups{0}, p{p}, place{0} {
+Player::Player(string name, char p): name{name}, money{1500}, square{0}, timsCups{0}, p{p}, place{0} {
     // initialize empty building pointer arrays for new players
     this->acb = new vector<Academic*>{};
     this->resb = new vector<Residence*>{};
