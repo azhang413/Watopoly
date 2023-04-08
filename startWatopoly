@@ -1,0 +1,19 @@
+#!/bin/bash
+
+usage() {
+    echo "usage: Watopoly">&2
+    echo "-load filename">&2
+    echo "-testing">&2
+}
+
+if [ $# -eq 0 ]; then
+    ./main false "" false
+elif [ $# -eq 2 ]; then
+    if [ $1 == "-load" ]; then
+        ./main true "$2" false
+    elif [ $1 == "-testing" ]; then
+        ./main false "" true
+    fi
+elif [ $# -eq 3 ]; then
+    ./main true "$2" true
+fi
