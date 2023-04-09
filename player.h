@@ -8,11 +8,11 @@ class Residence;
 class Gym;
 
 struct Player {
-    std::string name;
+    const std::string name;
     int money;
     int square;
     int timsCups;
-    char p;
+    const char p;
     int place;
     std::vector<std::vector<Academic*>> acb;
     std::vector<Residence*> resb;
