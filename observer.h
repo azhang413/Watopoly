@@ -5,8 +5,8 @@ class Square;
 
 class Observer {
     public:
-        virtual void notify(Square * sq) = 0;
-        ~Observer();
+    virtual void notify() = 0;
+    virtual ~Observer() {}
 };
 
 #endif
