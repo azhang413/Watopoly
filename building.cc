@@ -2,8 +2,18 @@
 #include "shuffle.h" // for gym
 #include "player.h"
 #include <map>
+#include <exception>
 
 using namespace std;
+
+class WTH {
+        string m_message;
+    public:
+        WTH(const string & message) : m_message(message) {} 
+        const string message() const {
+            return m_message;
+        }
+};
 
 bool Building::checkOwner(Player * curr) const {
     return owner == curr;
@@ -70,7 +80,7 @@ map<int,Monopoly> intToMono = {
     {8,Monopoly::MATH}
 };
 
-map<string, vector<int>> improvements = {
+map<string, vector<int>> improveMap = {
     //A1
     {"AL", {2, 10, 30,90,160,250}},
     {"ML", {4, 20, 60,180,320,450}},
@@ -103,23 +113,38 @@ map<string, vector<int>> improvements = {
     {"DC", {50, 200, 600,1400,1700,2000}}
 };
 
+void Academic::buyImprovements(int numOfImprovements) { // board checks monopoly
+    if ((improvements + numOfImprovements) > 5) {
+        throw WTH("Number of Improvements Exceeds 5");
+    } else if (owner->money < (numOfImprovements * improveCost)) {
+        throw WTH("Cannot Afford Improvements");
+    } else {
+        improvements += numOfImprovements; // increase improvements
+        owner->money -= numOfImprovements * improveCost; // subtract owner's money
+        string name = getName(); // gets name of building
+        tuition = improveMap[name][improvements]; // update tuition
+    }
+}
+
+void Academic::sellImprovements(int numOfImprovements) { // board checks monopoly
+    if (improvements == 0) {
+        throw WTH("No Improvements to Sell");
+    } else if (improvements < numOfImprovements) {
+        throw WTH("Not Enough Improvements Owned");
+    } else {
+        improvements -= numOfImprovements; // decrease improvements
+        owner->money += numOfImprovements * (improveCost/2); // subtract owner's money
+        string name = getName(); // gets name of building
+        tuition = improveMap[name][improvements]; // update tuition
+    }
+}
+
 void Academic::setOwner(Player* buyer) {
     Building::owner = buyer; // buyer -> owner
      // adds current residence to owner's list of owned residences
     int index = construct[getName()][0] - 1;
     owner->acb[index].push_back(this); // put into correct monopoly
     int numOfMono = buyer->acb[index].size();
-
-    if ( m == Monopoly::MATH || m == Monopoly::A1) { // completed monopoly
-        if (numOfMono == 2) {
-            for (auto i : owner->acb[index]) {
-            }
-        }
-    } else {
-        if (numOfMono == 3) {
-            // monopoly yes
-        }
-    }
 }
 
 void Academic::charge(Player* curr) const {
@@ -133,7 +158,7 @@ Academic::Academic (const string name) : Building{name} {
     m = intToMono[construct[name][0]]; // const
     this->setCost(construct[name][1]); // const but priv
     improveCost = construct[name][2]; // const
-    tuition = improvements[name][0];
+    tuition = improveMap[name][0];
 }
 
 

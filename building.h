@@ -3,7 +3,6 @@
 
 #include<vector>
 #include<string>
-#include"observer.h"
 
 class Player;
 
@@ -30,10 +29,13 @@ class Academic : public Building {
         Monopoly m;
         int improveCost; // improve cost
         int tuition;
+        int improvements;
     public:
         Academic(const std::string name); // ctor for construction
-        void setOwner(Player* buyer) override; // only building class access
+        void setOwner(Player* buyer) override; 
         void charge(Player * curr) const override;
+        void buyImprovements(int numOfImprovements);
+        void sellImprovements(int numOfImprovements);
 };
 
 class Residence : public Building {
