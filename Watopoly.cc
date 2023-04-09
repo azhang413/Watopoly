@@ -10,6 +10,16 @@ using namespace std;
 
 class Players
 
+void Tokenize(string str, vector<string> &out, string delim = " ") {
+    int start = 0;
+    int end = str.find(delim);
+    while (end != -1) {
+        out.push_back(str.substr(start, end - start));
+        start = end + delim.size();
+        end = str.find(delim, start);
+    }
+}
+
 int main(int argc, char* argv[]) {
 
     const string True{"true"};
@@ -34,7 +44,7 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < numPlayers; ++i) {
             vector<string> line;
             getline(f, s);
-            istringstream iss{s};
+            Tokenize(s, line);
             while ()
             if (line[4] == "10") { // if player is in the time line
                 Player *pp = new Player{line[3], line[4], line[2], line[1], line[5]};
@@ -73,6 +83,7 @@ int main(int argc, char* argv[]) {
 
     // start game
     while (cin >> cmd) {
+        cout << board << endl;
         if (cmd == "roll") {
             // implement roll with shuffle
             int steps = dice1.roll() + dice2.roll();
