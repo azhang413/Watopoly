@@ -22,7 +22,7 @@ class Building { // abstract superclass
         virtual void setOwner(Player * buyer) = 0; // when unowned building gets bought -> sets price accordingly
         virtual void charge(Player * curr) const = 0;
     public: // for when player wants to buy -> owner == nullptr
-        bool checkOwner(Player * curr) const {}
+        bool checkOwner(Player * curr) const;
 };
 
 class Academic : public Building {
