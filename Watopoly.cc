@@ -12,24 +12,12 @@ using namespace std;
 
 class Players
 
-void Tokenize(string str, vector<string> &out, string delim = " ") {
-    int start = 0;
-    int end = str.find(delim);
-    while (end != -1) {
-        out.push_back(str.substr(start, end - start));
-        start = end + delim.size();
-        end = str.find(delim, start);
-    }
-}
-
 int main(int argc, char* argv[]) {
 
     const string True{"true"};
     const string False{"false"};
-    const string delim{" "};
     int numPlayers;
-    vector<Player*> players;
-    theBoard board{};
+    vector<Players> players;
     string cmd;
     int curTurn = 0;
     vector<int> diceVec{1,2,3,4,5,6};
@@ -37,46 +25,41 @@ int main(int argc, char* argv[]) {
     Shuffle dice2{diceVec};
 
     // setup game
-    if (argv[1] == True) {
+    if (argv[1] == True) {\
+        // load game 
         string s;
-        ifstream f{argv[2]};
+        ifstream f{agrv[2]};
         getline(f, s);
-        istringstream iss{s};
-        iss >> numPlayers;
+        numPlayers = stoi(s);
         for (int i = 0; i < numPlayers; ++i) {
+            getline(f, s)
             vector<string> line;
-            getline(f, s);
             Tokenize(s, line);
-            while ()
-            if (line[4] == "10") { // if player is in the time line
-                Player *pp = new Player{line[3], line[4], line[2], line[1], line[5]};
-            } else {
-                Player *pp = new Player{line[3], line[4], line[2], line[1], 0};
+            if (line.length() == 6) {
+                Player *np = new Player{line[0], stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1], stoi(line[5])};
             }
-            players.push_back(pp);
+            else {
+                Player *np = new Player{line[0], stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1], 0};
+            }
+            players.push_back(np);
         }
-        board.players = players;
-
-        while (getline(f, s)) {
-            vector<string> line;
-            tokenize(s, delim, lime); // seperate line by spaces
-            string bd = line[0];
-            if (bd == "AL") {
-                // set building owners
-                board.squares[1].b->setOwner(line[1]);
-            } 
-            // repeat for other buildings
-        }        
+        theBoard board{players};
+        board.init(f);
     } else {
         char chosenPiece;
+        string playerName;
         cout << "Welcome to Watopoly! How many players?" << endl;
         cin >> numPlayers;
         for (int i = 0; i < numPlayers; ++i) {
-            cout << "Player" << i + 1 << " choose a piece: "<< endl;
+            cout << "Player" << i + 1 << " what is your name?: "<< endl;
+            cin >> playerName;
+            cout << playerName << " choose a piece: " << endl;
             cin >> chosenPiece;
-            Player *np = new Player{chosenPiece};
+            Player *np = new Player{playerName, chosenPiece};
             players.push_back{np};
         }
+        theBoard board{players};
+        board.init();
     }
     if (argv[3] == True) {
         // turn on testing mode

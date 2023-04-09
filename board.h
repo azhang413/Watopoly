@@ -10,15 +10,15 @@
 
 
 class theBoard {
-    std::vector<Square> squares;
+    std::vector<Square*> squares;
     std::vector<Player*> players;
     Display *td;
     void auction(Building *b);
     public:
-        theBoard();
+        theBoard(vector<Player> players);
         void init(string file = "");
         ~theBoard() { delete td; }
-        void move(Player *p, int steps);
+        // void move(Player *p, int steps);
         friend std::ostream &operator<<(std::ostream out, const theBoard &b);
 };
 
