@@ -1,6 +1,7 @@
-#ifndef _SHUFFLE_
-#define _SHUFFLE_
+#ifndef __SHUFFLE_H__
+#define __SHUFFLE_H__
 #include<vector>
+#include<random>
 
 // if no seed is given, must generate random seed for each call
 
