@@ -19,6 +19,13 @@ struct Player {
     std::vector<Gym*> gymb;
     // construct new player
     Player(std::string name, char p);
+    // construct player based off load
+    Player(std::string name,
+           int money, 
+           int square, 
+           int timCups,
+           char p, 
+           int place);
 };
 
 #endif
