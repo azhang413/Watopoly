@@ -23,7 +23,7 @@ struct Player {
     Player(std::string name,
            int money, 
            int square, 
-           int timCups;
+           int timCups,
            char p, 
            int place);
 };
