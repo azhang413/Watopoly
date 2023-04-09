@@ -14,9 +14,10 @@ Player::Player(string name, char p): name{name}, money{1500}, square{0}, timsCup
 }
 
 // player construction based of load
-Player::Player(int money,
+Player::Player(string name,
+               int money,
                int square,
                int timsCups,
-               char p
-               int place):
+               char p,
+               int place): name{name}, 
                money{money}, square{square}, timsCups{timsCups}, p{p}, place{place} {}
