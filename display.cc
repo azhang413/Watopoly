@@ -1,4 +1,6 @@
 #include "display.h"
+#include "square.h"
+#include "player.h"
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -26,3 +28,12 @@ ostream &operator<<(ostream &out, const Display &dis){
     }
     return out;
 }
+
+
+ void Display::notify(Subject<Info> &s) {
+    // I know this is wrong but just a starting point
+    for (Player plyr : s.getInfo().players) {
+        text[s.getInfo().PlayerRow][s.getInfo().PlayerCol] = plyr.p;
+    }
+ }
+

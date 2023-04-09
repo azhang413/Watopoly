@@ -2,13 +2,14 @@
 #define __SUBJECT_H__
 #include <vector>
 
-class Observer;
+template <typename InfoType> class Observer;
 
-class Subject {
-    std::vector<Observer*> observers;
+template <typename InfoType> class Subject {
+    std::vector<Observer<InfoType>*> observers;
     public:
         void attach(Observer *o) { observers.push_back(o); }
         void notifyObservers() { for (auto o: observers) o->notify(*this); }
+        virtual InfoType getInfo() const = 0;
         virtual ~Subject() {}
 };
 
