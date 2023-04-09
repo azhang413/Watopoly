@@ -6,6 +6,8 @@
 #include <sstream>
 #include "shuffle.h"
 #include "player.h"
+#include "board.h"
+
 using namespace std;
 
 class Players
