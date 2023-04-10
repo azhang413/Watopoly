@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
     bool load = false;
     const string True{"true"};
     const string False{"false"};
@@ -34,11 +34,12 @@ int main(int argc, char** argv) {
             vector<string> line;
             Tokenize(s, line);
             Player *np;
+            string name = line[0];
             if (line.size() == 6) {
-                np = new Player{line[0], stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1][0], stoi(line[5])};
+                np = new Player{name, stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1][0], stoi(line[5])};
             }
             else {
-                np = new Player{line[0], stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1][0], 0};
+                np = new Player{name, stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1][0], 0};
             }
             players.emplace_back(np); 
         }
@@ -70,7 +71,6 @@ int main(int argc, char** argv) {
     }
     cout << board;
     // start game
-    /*
     while (cin >> cmd) {
         cout << board << endl;
         if (cmd == "roll") {
@@ -113,6 +113,4 @@ int main(int argc, char** argv) {
             cin >> filename;
         }
     }
-
-    */
 }

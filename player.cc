@@ -19,5 +19,7 @@ Player::Player(string name,
                int timsCups,
                char p,
                int place): name{name}, 
-               money{money}, square{square}, timsCups{timsCups}, p{p}, place{place} {}
+               money{money}, square{square}, timsCups{timsCups}, p{p}, place{place} {
+                this->acb = vector<vector<Academic*>>(8);
+               }
 

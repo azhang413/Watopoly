@@ -46,7 +46,7 @@ map<string, SpecialType> constructBoard = {
     {"SLC", SpecialType::SLC},
     {"BMH", SpecialType::Academic},
     {"OPT", SpecialType::Academic},
-    {"Goose Nesting", SpecialType::Goose},
+    {"GOOSE NESTING", SpecialType::Goose},
     {"EV1", SpecialType::Academic},
     {"NEEDLES HALL", SpecialType::NH},
     {"EV2", SpecialType::Academic},

@@ -7,13 +7,13 @@ usage() {
 }
 
 if [ $# -eq 0 ]; then
-    ./main false "" false
+    ./Watopoly false "" false
 elif [ $# -eq 2 ]; then
     if [ $1 == "-load" ]; then
-        ./main true "$2" false
+        ./Watopoly true "$2" false
     elif [ $1 == "-testing" ]; then
-        ./main false "" true
+        ./Watopoly false "" true
     fi
 elif [ $# -eq 3 ]; then
-    ./main true "$2" true
+    ./Watopoly true "$2" true
 fi
