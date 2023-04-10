@@ -413,29 +413,11 @@ void theBoard::init() {
     this->squares[0]->notifyObservers();
 }
 
-void theBoard::move(Player* p, int steps) {
+Building* theBoard::move(Player* p, int steps) {
     squares[p->square]->removePlayer(p);
     p->square += steps;
     squares[p->square]->addPlayer(p);
-    Building* curB = squares[p->square]->getBuilding();
-    if (curB->checkOwner(bank)) {
-        // ask to buy
-        char resp;
-        cout << "Would you like to buy this property? {y / n}" << endl;
-        cin >> resp;
-        if (resp == 'y') {
-            curB->setOwner(p);
-            // charge cost?
-        } else {
-            // start auction
-        }
-    } else if (!curB->checkOwner(p)) {
-        // charge rent
-        curB->charge(p);
-        if (p->money < 0) { 
-            //bankrupt 
-        }
-    }
+    return squares[p->square]->getBuilding();
 }
 
 void theBoard::save(string file) {
@@ -455,81 +437,6 @@ void theBoard::save(string file) {
 }
 
 void theBoard::trade(Player* cur, Player *other, string give, string receive) {
-    istringstream iss1{give};
-    istringstream iss2{receive};
-    int check;
-    
-    bool abort = false;
-    bool found = false;
-    // string string -> check curr player building and check other player building
-    // int string -> check curr player money and check other player building
-    // string int -> check curr player building and check other player money
-    // int int -> abort offer
-
-    // when checking string -> if player does not have building, abort
-    // when checking int -> if player money is not enough, abort
-
-    if (iss1 >> check) { // first is int, second has to be building
-        if (check < cur->money) {
-            cout << "You Do Not Have Enough Money to Complete This Trade." << endl;
-            abort = true;
-        }
-        if (abort == false) {
-            for (int i = 0; i < 8; ++i) { 
-                for (auto j : other->acb[i]) {
-                    if (j->getName == receive) { // check if has improvements
-                        found = true;
-                        if (j->getImprovements) { // abort
-                            cout << "Requested Building Has Improvements." << endl;
-                            abort = true;
-                        } 
-                        break;
-                    }
-                }
-                if (found == true) {break;}
-            }
-        }
-
-        if (found == false && abort == false) {
-             for (auto j : other->resb) {
-                if (j->getName == receive) {
-                    found == true;
-                    break;
-                }
-             }
-        }
-
-        if (found == false && abort == false) {
-             for (auto j : other->gymb) {
-                if (j->getName == receive) {
-                    found == true;
-                    break;
-                }
-             }
-        }
-
-        if (found == true && abort == false) {
-            cout << "Trade Sent Successfully" << endl;
-            cout << "Does " << other->name << " Accept This Trade? (Answer with 'accept' or 'reject')" << endl;
-            string ans;
-            while (cin >> ans) {
-                if (ans == "accept") {
-                    // update 
-                    other->money += check;
-                    
-                } else if (ans == "reject") {
-                    cout << other->name << " Has Rejected Your Trade." << endl;
-                    break;
-                } else {
-                    cout << "Invalid Response, Please Try Again."
-                }
-            }
-        }
-
-
-    } else { // first is string, second can be building or string
-
-    }
 }
 
 ostream &operator<<(ostream &out, const theBoard &b) {
