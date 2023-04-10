@@ -304,7 +304,7 @@ void theBoard::init(const string & filename, int numPlayers) {
         vector<int> coords = calcCoords(ind + 1);
         if (constructBoard[sq] == SpecialType::Academic) {
             // constructBoard with custom inputs
-            Academic *newAc = new Academic{sq, line[1]};
+            Academic *newAc = new Academic{sq, stoi(line[1])};
             newSq = new Square{coords[0], coords[1], coords[2], coords[3], constructBoard[sq], newAc};
         } else if (constructBoard[sq] == SpecialType::Residence) {
             // constructBoard with custom inputs
