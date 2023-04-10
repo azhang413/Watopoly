@@ -19,7 +19,6 @@ class Building { // abstract superclass
     public: // 
         std::string getName() const;
         virtual void setOwner(Player * buyer) = 0; // when unowned building gets bought -> sets price accordingly
-        virtual void charge(Player * curr) const = 0;
         bool checkOwner(Player * curr) const;
         virtual int getImprovements() const;
         std::string getOwner() const;
