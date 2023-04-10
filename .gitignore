@@ -1,4 +1,5 @@
 vgcore*
 .vscode/*
 *.o
+*.d
 Watopoly
