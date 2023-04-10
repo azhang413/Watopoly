@@ -160,6 +160,20 @@ void Academic::setOwner(Player* buyer) {
     buyer->acb[index].push_back(this); // put into correct monopoly
 }
 
+void Academic::removeOwner() {
+    if (owner == nullptr) {return;} // do nothing
+
+    // remove from owner's owned vector 
+    int index = construct[getName()][0] - 1;
+    for (auto i = owner->acb[index].begin(); i != owner->acb[index].end(); ++i) {
+        if (&(**i) == &(*this)) { // found, remove
+            owner->acb[index].erase(i);
+        }
+    }
+    // set to nullptrs
+    owner = nullptr;
+}
+
 int Academic::getCharge() const {
     return tuition; // add to owner's money
 }
@@ -208,6 +222,19 @@ int Residence::getCharge() const {
     return rent;
 }
 
+void Residence::removeOwner() {
+    if (owner == nullptr) {return;} // do nothing
+
+    // remove from owner's owned vector 
+    for (auto i = owner->resb.begin(); i !=  owner->resb.end(); ++i) {
+        if (&(**i) == &(*this)) { // found, remove
+             owner->resb.erase(i);
+        }
+    }
+    // set to nullptrs
+    owner = nullptr;
+}
+
 Residence::Residence(const string name): Building{name, 200} {}
 
 // Gym
@@ -246,6 +273,19 @@ int Gym::getCharge() const {
 
     return amount;
 
+}
+
+void Gym::removeOwner() {
+    if (owner == nullptr) {return;} // do nothing
+
+    // remove from owner's owned vector 
+    for (auto i = owner->gymb.begin(); i !=  owner->gymb.end(); ++i) {
+        if (&(**i) == &(*this)) { // found, remove
+             owner->gymb.erase(i);
+        }
+    }
+    // set to nullptrs
+    owner = nullptr;
 }
 
 Gym::Gym(const string name): Building{name, 150} {}
