@@ -788,7 +788,7 @@ void theBoard::all() {
     }
 }
 
-void theBoard::bankrupt(Player* cur, Player* owed) {
+/* void theBoard::bankrupt(Player* cur, Player* owed) {
     // if possible replace the money exchanges with charge functions
     if (owed == bank) {
         cur->money = 0;
@@ -822,7 +822,7 @@ void theBoard::bankrupt(Player* cur, Player* owed) {
                     cin >> resp;
                     if (resp == "y") {
                         owed->money -= ac->getCost() * 0.5;
-                        ac->mortgage = true;
+                        ac->mortgaged = true;
                     }
                 }
                 ac->setOwner(owed);
@@ -831,14 +831,14 @@ void theBoard::bankrupt(Player* cur, Player* owed) {
         }
         for (auto res : cur->resb) {
             if (res->mortgaged) {
-                owed->money -= ac->getCost() * 0.1;
+                owed->money -= res->getCost() * 0.1;
                 cout << "Would you like to unmortgage ";
                 cout << res->getName() << "? {y / n}" << endl;
                 string resp;
                 cin >> resp;
                 if (resp == "y") {
                     owed->money -= res->getCost() * 0.5;
-                    res->mortgage = true;
+                    res->mortgaged = true;
                 }
             }
             res->setOwner(owed);
@@ -852,7 +852,7 @@ void theBoard::bankrupt(Player* cur, Player* owed) {
                 cin >> resp;
                 if (resp == "y") {
                     owed->money -= gym->getCost() * 0.5;
-                    gym->mortgage = true;
+                    gym->mortgaged = true;
                 }
                 owed->money -= gym->getCost() * 0.1;
             }
@@ -860,7 +860,7 @@ void theBoard::bankrupt(Player* cur, Player* owed) {
             this->auction(gym);
         }
     }
-}
+} */
 
 ostream &operator<<(ostream &out, const theBoard &b) {
     out << *b.td;

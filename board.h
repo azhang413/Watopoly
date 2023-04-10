@@ -31,7 +31,7 @@ class theBoard {
         void unmortgage(Player* cur, std::string b);
         void assets(Player* cur);
         void all();
-        void bankrupt(Player* cur);
+        void bankrupt(Player* cur, Player* owed);
         ~theBoard() { delete td; }
         // void move(Player *p, int steps);
         friend std::ostream &operator<<(std::ostream &out, const theBoard &b);

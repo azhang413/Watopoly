@@ -1,15 +1,15 @@
 3
-Isaac G 0 1500 2
-Aaron $ 1 2000 10
+Isaac G 0 1500 8 0
+Aaron $ 1 2000 10 0
 Rahel S 2 30000 10 2
 AL BANK 0
 ML BANK 0
 MKV Aaron 0
 ECH Rahel 0
-PAS Isaac 0
+PAS Aaron 0
 HH BANK 0
-PAC Aaron 0
 RCH BANK 0
+PAC Isaac 0
 DWE BANK 0
 CPH BANK 0
 UWP BANK 0
