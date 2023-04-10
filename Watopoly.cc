@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <exception>
 #include "shuffle.h"
 #include "player.h"
 #include "board.h"
@@ -48,21 +49,64 @@ int main(int argc, char* argv[]) {
         vector<char> pieces{'G', 'B', 'D', 'P', 'S', '$', 'L', 'T'};
         char chosenPiece;
         string playerName;
-        cout << "Welcome to Watopoly! How many players?" << endl;
+        cout << "Welcome to Watopoly! How many players? (max of 8 players)" << endl;
         cin >> numPlayers;
+        if (numPlayers > 8 || numPlayers <= 0) { // checks for range, exits if invalid.
+            cout << "Invalid Number of Players. Exiting program..." << endl;
+            exit(0);
+        }
         for (int i = 0; i < numPlayers; ++i) {
+            cout << " " << endl;
             cout << "Player " << i + 1 << " what is your name?: "<< endl;
-            cin >> playerName;
-            cout <<  "Available Pieces: ";
-            for (auto i: pieces) {cout << "[" << i << "] ";}
-            //while(true) {
-            cout << playerName << " choose a piece: " << endl;
-            cin >> chosenPiece;
-            //}
+            try {
+                cin >> playerName;
+                if (cin.eof()) {
+                    throw runtime_error("EOF reached");
+                }
+            } catch (const exception& e) {
+                cout << "Invalid Behaviour. Exiting program..." << endl;
+                exit(0);
+            }
+            cout << " " << endl;
+            cout << "Hi " << playerName << "! Here are the available 'Pieces' you can pick from:"<< endl;
+            for (auto p: pieces) {cout << "[" << p << "] ";}
+            cout << endl;
+            cout << " " << endl;
+            cout << "Please pick a piece: " << endl;
+            bool cont = false;
+            try {
+                while(true) { // checks for valid piece
+                    cin >> chosenPiece;
+                    if (cin.eof()) {
+                        throw runtime_error("EOF reached");
+                        break;
+                    }
+                    for (auto j = pieces.begin(); j != pieces.end(); ++j) {
+                        if (*j == chosenPiece) {
+                            pieces.erase(j);
+                            cont = true;
+                            break;
+                        }
+                    
+                    }
+
+                    if (cont) {
+                        cout << playerName << " have chosen " << "[" << chosenPiece << "]" << endl;
+                        break;
+                    } else {
+                        cout << " " << endl;
+                        cout << "Invalid Selection. " << "Please try again." << endl;
+                    }
+                }
+            } catch (const exception& e) {
+                cout << "Invalid Behaviour. Exiting program..." << endl;
+                exit(0);
+            }
             Player *np = new Player{playerName, chosenPiece};
             players.emplace_back(np);
         }
     }
+
     if (argv[3] == True) {
         // turn on testing mode
         cout << "testing" << endl;
