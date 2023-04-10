@@ -1,10 +1,9 @@
 #ifndef __BUILDING_H__
 #define __BUILDING_H__
 
-#include<vector>
-#include<string>
-
-class Player;
+#include <vector>
+#include <string>
+#include "player.h"
 
 enum class Monopoly {A1,A2,ENG,HLTH,ENV,S1,S2,MATH};
 
@@ -13,16 +12,17 @@ class Building { // abstract superclass
         const std::string name;
         int cost; // set price in constructor
     protected:
-        Player * owner = nullptr;
+        Player* owner = new Player{"BANK", 'W'};
         Building(const std::string name, int cost) : name{name}, cost{cost} {} // ctor
         Building(const std::string name) : name{name} {} 
-        std::string getName() const;
         void setCost(int cost);
+    public: // for when player wants to buy -> owner == nullptr
+        std::string getName() const;
         virtual void setOwner(Player * buyer) = 0; // when unowned building gets bought -> sets price accordingly
         virtual void charge(Player * curr) const = 0;
-    public: // for when player wants to buy -> owner == nullptr
         bool checkOwner(Player * curr) const;
         virtual int getImprovements() const;
+        std::string getOwner() const;
         virtual ~Building() {};
 };
 
