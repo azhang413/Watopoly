@@ -486,15 +486,19 @@ void theBoard::assets(Player* cur) {
             if (!ac->mortgaged) cout << ac->getName() << " ";
         }
     }
-    cout << endl;
     for (auto res : cur->resb) {
         if (!res->mortgaged) cout << res->getName() << " ";
     }
-    cout << endl;
     for (auto gym : cur->gymb) {
         if (!gym->mortgaged) cout << gym->getName() << " ";
     }
     cout << endl;
+}
+
+void theBoard::all() {
+    for (auto p : players) {
+        this->assets(p);
+    }
 }
 
 ostream &operator<<(ostream &out, const theBoard &b) {

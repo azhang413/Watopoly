@@ -124,14 +124,16 @@ int main(int argc, char* argv[]) {
 
     Building* landedOn = board.move(players[0], 3);
     board.save("out.txt");
+    board.assets(players[1]);
     board.mortgage(players[1], "HH");
     board.mortgage(players[0], "EV1");
     board.mortgage(players[1], "PAC");
     board.unmortgage(players[1], "HH");
     board.unmortgage(players[1], "EV1");
-    board.unmortgage(players[1], "PAC");
+    //board.unmortgage(players[1], "PAC");
     cout << board;
     board.assets(players[1]);
+    board.all();
     /*
     while (cin >> cmd) {
         
