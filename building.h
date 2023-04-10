@@ -22,6 +22,8 @@ class Building { // abstract superclass
         virtual void charge(Player * curr) const = 0;
     public: // for when player wants to buy -> owner == nullptr
         bool checkOwner(Player * curr) const;
+        virtual int getImprovements() const;
+        virtual ~Building() {};
 };
 
 class Academic : public Building {
@@ -32,10 +34,12 @@ class Academic : public Building {
         int improvements;
     public:
         Academic(const std::string name); // ctor for construction
-        void setOwner(Player* buyer) override; 
+        void setOwner(Player* buyer) override;
+        int getImprovements() const override; 
         void charge(Player * curr) const override;
         void buyImprovements(int numOfImprovements);
         void sellImprovements(int numOfImprovements);
+        ~Academic() override;
 };
 
 class Residence : public Building {
@@ -45,7 +49,6 @@ class Residence : public Building {
         void setOwner(Player* buyer) override; // only building class access
         void charge(Player * curr) const override;
         Residence(const std::string name); // ctor
-        
 };
 
 class Gym : public Building {

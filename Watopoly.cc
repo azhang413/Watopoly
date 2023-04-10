@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <board.h>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -10,10 +9,8 @@
 
 using namespace std;
 
-class Player;
-
 int main(int argc, char** argv) {
-
+    bool load = false;
     const string True{"true"};
     const string False{"false"};
     int numPlayers;
@@ -27,6 +24,7 @@ int main(int argc, char** argv) {
     // setup game
     if (argv[1] == True) {
         // load game 
+        load = true;
         string s;
         ifstream f{argv[2]};
         getline(f, s);
@@ -42,10 +40,8 @@ int main(int argc, char** argv) {
             else {
                 np = new Player{line[0], stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1][0], 0};
             }
-            players.push_back(np); 
+            players.emplace_back(np); 
         }
-        theBoard board{players};
-        board.init(argv[2], numPlayers);
     } else {
         char chosenPiece;
         string playerName;
@@ -57,17 +53,24 @@ int main(int argc, char** argv) {
             cout << playerName << " choose a piece: " << endl;
             cin >> chosenPiece;
             Player *np = new Player{playerName, chosenPiece};
-            players.push_back{np};
+            players.emplace_back(np);
         }
-        theBoard board{players};
-        board.init();
     }
     if (argv[3] == True) {
         // turn on testing mode
         cout << "testing" << endl;
     }
 
+    theBoard board{players};
+     
+    if (load) {
+        board.init(argv[2], numPlayers);
+    } else {
+        board.init();
+    }
+    cout << board;
     // start game
+    /*
     while (cin >> cmd) {
         cout << board << endl;
         if (cmd == "roll") {
@@ -110,4 +113,6 @@ int main(int argc, char** argv) {
             cin >> filename;
         }
     }
+
+    */
 }

@@ -5,11 +5,22 @@
 template<typename Info> class Observer;
 
 template<typename Info> class Subject {
-    std::vector<Observer*> observers;
+    std::vector<Observer<Info>*> observers;
     public:
-        void attach(Observer *o) { observers.push_back(o); }
-        void notifyObservers() { for (auto o: observers) o->notify(*this); }
+        void attach(Observer<Info>* o);
+        void notifyObservers();
         virtual Info getInfo() const = 0;
+        virtual ~Subject() {};
 };
+
+template<typename Info>
+void Subject<Info>::attach(Observer<Info> *o) {
+    observers.emplace_back(o);
+}
+
+template<typename Info>
+void Subject<Info>::notifyObservers() { 
+    for (auto &o: observers) o->notify(*this); 
+}
 
 #endif

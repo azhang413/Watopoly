@@ -8,18 +8,19 @@
 #include "display.h"
 #include "shuffle.h"
 
-void Tokenize(string str, vector<string> &out, const string delim = " ");
-int getInd(vector<string> v, string s);
+void Tokenize(std::string str, std::vector<std::string> &out, const std::string delim = " ");
+int getInd(std::vector<std::string> v, std::string s);
 
 class theBoard {
     std::vector<Square*> squares;
     std::vector<Player*> players;
     Display *td;
     void auction(Building *b);
+    std::vector<int> calcCoords(int order);
     public:
-        theBoard(vector<Player*> players);
+        theBoard(std::vector<Player*> players);
         void init();
-        void init(const string& name, int numPlayers);
+        void init(const std::string& name, int numPlayers);
         ~theBoard() { delete td; }
         // void move(Player *p, int steps);
         friend std::ostream &operator<<(std::ostream &out, const theBoard &b);

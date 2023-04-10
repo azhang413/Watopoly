@@ -15,6 +15,10 @@ class WTH {
         }
 };
 
+int Building::getImprovements() const {
+    return -1;
+}
+
 bool Building::checkOwner(Player * curr) const {
     return owner == curr;
 }
@@ -28,7 +32,6 @@ string Building::getName() const {
 }
 
 // Academic
-
 
 // 2 maps:
 // construction
@@ -126,6 +129,12 @@ void Academic::buyImprovements(int numOfImprovements) { // board checks monopoly
     }
 }
 
+int Academic::getImprovements() const {
+    return improvements;
+}
+
+Academic::~Academic() {}
+
 void Academic::sellImprovements(int numOfImprovements) { // board checks monopoly
     if (improvements == 0) {
         throw WTH("No Improvements to Sell");
@@ -144,7 +153,6 @@ void Academic::setOwner(Player* buyer) {
      // adds current residence to owner's list of owned residences
     int index = construct[getName()][0] - 1;
     owner->acb[index].push_back(this); // put into correct monopoly
-    int numOfMono = buyer->acb[index].size();
 }
 
 void Academic::charge(Player* curr) const {
@@ -198,7 +206,6 @@ void Residence::charge(Player* curr) const {
 }
 
 Residence::Residence(const string name): Building{name, 200} {}
-
 
 // Gym
 
