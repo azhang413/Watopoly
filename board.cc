@@ -6,6 +6,7 @@
 #include "building.h"
 
 using namespace std;
+class WTH;
 
 int getInd(vector<string> v, string s) {
     int i = 0;
@@ -421,6 +422,94 @@ Building* theBoard::move(Player* p, int steps) {
     return squares[p->square]->getBuilding();
 }
 
+void theBoard::buyImprovements(Player* cur, string building) {
+
+    // getting square index of building 
+    int buildingSquare = getInd(squareOrder, building);
+    if (buildingSquare == -1) {
+        cout << "Building not found" << endl;
+        return;
+    }
+
+    // checking building type, if not academic, return nothing 
+
+    Building* b = squares[buildingSquare]->getBuilding();
+    if (constructBoard[building] != SpecialType::Academic) {
+        cout << "Invalid Request. Building is NOT of Academic Type. Please Try Again" << endl;
+        return;
+    }
+
+    // building is a building type.
+    // now we check owner
+     
+    if (!(b->checkOwner(cur))) {
+        cout << "Invalid Request. " << cur->name << " is not the owner of this building. Please Try Again" << endl;
+        return;
+    }
+    // is owner and building exists. now check for monopoly (index 0 and 7)
+    if(b->checkMonopoly() == false) {
+        cout << "Invalid Request. " << cur->name << " does not own a monopoly for " << building << ". Please Try Again" << endl;
+        return;
+    }
+    // owner owns a monopoly, can buy now
+    const int amount = 1;
+    try {
+        b->buyImprovements(amount); // should try catch
+    } catch(const WTH& wth) {
+        cout << "Invalid Request. Error: ";
+        cout << wth.message() << endl;
+        return;
+    }
+
+    cout << cur->name << " bought " << amount << " improvement for " << building << endl;
+    cout << building << " now has " << b->getImprovements() << " improvements." << endl;
+
+}
+
+void theBoard::sellImprovements(Player* cur, string building) {
+    // getting square index of building 
+    int buildingSquare = getInd(squareOrder, building);
+    if (buildingSquare == -1) {
+        cout << "Building not found" << endl;
+        return;
+    }
+
+    // checking building type, if not academic, return nothing 
+
+    Building* b = squares[buildingSquare]->getBuilding();
+    if (constructBoard[building] != SpecialType::Academic) {
+        cout << "Invalid Request. Building is NOT of Academic Type. Please Try Again" << endl;
+        return;
+    }
+
+    // building is a building type.
+    // now we check owner
+     
+    if (!(b->checkOwner(cur))) {
+        cout << "Invalid Request. " << cur->name << " is not the owner of this building. Please Try Again" << endl;
+        return;
+    }
+    // is owner and building exists. now check monopoly
+
+    if(b->checkMonopoly() == false) {
+        cout << "Invalid Request. " << cur->name << " does not own a monopoly for " << building << ". Please Try Again" << endl;
+        return;
+    }
+
+    const int amount = 1;
+
+    try {
+        b->sellImprovements(amount); // should try catch
+    } catch(const WTH& wth) {
+        cout << "Invalid Request. Error: ";
+        cout << wth.message() << endl;
+        return;
+    }
+
+    cout << cur->name << " sold " << amount << " improvement for " << building << endl;
+    cout << building << " now has " << b->getImprovements() << " improvements." << endl;
+}
+
 void theBoard::save(string file) {
     ofstream f{file};
     f << players.size() << "\n";
@@ -568,8 +657,8 @@ void theBoard::trade(Player* cur, Player *other, string give, string receive) {
             money4building = true; // give and int2 are valid 
         } else {
             cout << "Trade Unsuccessful. Error: 'Unknown' Something went wrong. Please try again." << endl;
-            return; // exit
-        }
+           return; // exit
+        } 
 
     } else if ((isBuilding1== true) && (isBuilding2 == true)) { // building -> building: use give and receive
         // check enough money from cur
@@ -793,6 +882,65 @@ ostream &operator<<(ostream &out, const theBoard &b) {
     return out;
 }
 
+void theBoard::auction(string name) {
+    int ind = getInd(squareOrder, name);
+    Building *b = squares[ind]->getBuilding();
+    int bid = 0;
+    int tmp;
+    int size = players.size();
+    Player *winner = players[0];
+    vector<Player *> bidders;
+    for (auto plyr : players) { 
+        bidders.emplace_back(plyr);
+    }
+    while (size > 1) {
+        for (auto i = bidders.begin(); i != bidders.end(); ++i) {
+            bool remove = false;
+            try {
+                while (true) {
+                    cout << "Current bid is : $" << bid << endl;
+                    cout << "Player " << (*i)->name << ", enter your bid as an integer between 0 and " << (*i)->money << endl;
+                    string s;
+                    cin >> s;
+                    if (cin.eof()) {
+                        throw runtime_error("EOF reached");
+                        break;
+                    } 
 
+                    stringstream iss{s};
+                    if (!(iss >> tmp)) {
+                        cout << "Invalid Bid, please enter a valid integer." << endl;
+                        continue;
+                    }
+                    // tmp is valid int;
+                    if (tmp >= (*i)->money || tmp < 0) {
+                        cout << "Insufficient Balance or Amount. Please Try Again." << endl;
+                       continue;
+                    } 
+                    if (tmp > bid) {
+                        bid = tmp;
+                    } else if (tmp <= bid) {
+                        remove = true;
+                    }
+                    break;
+                }
+            } catch (const exception &e) {
+                cout << "Invalid Behaviour. Exiting program..." << endl;
+                exit(0);
+            }
+
+            if (remove) {
+                bidders.erase(i);
+                i--;
+                size--;
+            }
+            if (size == 1) { break; }
+        }
+    }
+    winner = bidders[0];
+    cout << "Player " << winner->name << " won the bid!" << endl;
+    winner->money -= bid;
+    b->setOwner(winner);
+}
 
 

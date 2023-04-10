@@ -7,6 +7,15 @@
 
 enum class Monopoly {A1,A2,ENG,HLTH,ENV,S1,S2,MATH};
 
+class WTH {
+        std::string m_message;
+    public:
+        WTH(const std::string & message) : m_message(message) {} 
+        std::string message() const {
+            return m_message;
+        }
+};
+
 class Building { // abstract superclass
     private:
         const std::string name;
@@ -28,6 +37,9 @@ class Building { // abstract superclass
         std::string getOwner() const;
         virtual ~Building() {};
         virtual int getCharge() const = 0;
+        virtual void buyImprovements(int numOfImprovements);
+        virtual void sellImprovements(int numOfImprovements);
+        virtual bool checkMonopoly() const;
 };
 
 class Academic : public Building {
@@ -42,8 +54,9 @@ class Academic : public Building {
         void removeOwner() override;
         int getImprovements() const override; 
         int getCharge() const override;
-        void buyImprovements(int numOfImprovements);
-        void sellImprovements(int numOfImprovements);
+        bool checkMonopoly() const override;
+        void buyImprovements(int numOfImprovements) override;
+        void sellImprovements(int numOfImprovements) override;
         ~Academic() override;
 };
 

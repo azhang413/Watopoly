@@ -7,18 +7,14 @@
 
 using namespace std;
 
-class WTH {
-        string m_message;
-    public:
-        WTH(const string & message) : m_message(message) {} 
-        const string message() const {
-            return m_message;
-        }
-};
-
 int Building::getImprovements() const {
     return 0;
 }
+bool Building::checkMonopoly() const {
+    return false;
+}
+void Building::buyImprovements(int numOfImprovements) {}
+void Building::sellImprovements(int numOfImprovements) {}
 
 bool Building::checkOwner(Player * curr) const {
     return owner == curr;
@@ -131,7 +127,7 @@ int Building::nameToMono(string name) {
 
 void Academic::buyImprovements(int numOfImprovements) { // board checks monopoly
     if ((improvements + numOfImprovements) > 5) {
-        throw WTH("Number of Improvements Exceeds 5");
+        throw WTH("Number of Improvements Will Exceed 5");
     } else if (owner->money < (numOfImprovements * improveCost)) {
         throw WTH("Cannot Afford Improvements");
     } else {
@@ -183,17 +179,30 @@ void Academic::removeOwner() {
     owner = nullptr;
 }
 
-int Academic::getCharge() const {
-    return tuition; // add to owner's money
-}
-
-
 
 Academic::Academic (const string name, int improvements) : Building{name}, improvements{improvements} {
     m = intToMono[construct[name][0]]; // const
     this->setCost(construct[name][1]); // const but priv
     improveCost = construct[name][2]; // const
     tuition = improveMap[name][improvements];
+}
+
+bool Academic::checkMonopoly() const{
+    int s = this->owner->acb[construct[getName()][0] - 1].size();
+    if (construct[getName()][0] == 1 || construct[getName()][0] == 8) {
+        if (s == 2) {
+            return true;
+        } else {
+            return false;
+        }
+    } else if (s == 3) {
+        return true;
+    }
+    return false;
+}
+
+int Academic::getCharge() const {
+    return tuition;
 }
 
 
