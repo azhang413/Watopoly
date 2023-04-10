@@ -22,6 +22,7 @@ class theBoard {
         theBoard(std::vector<Player*> players);
         void init();
         void init(const std::string& name, int numPlayers);
+        void move(Player* p, int steps);
         ~theBoard() { delete td; }
         // void move(Player *p, int steps);
         friend std::ostream &operator<<(std::ostream &out, const theBoard &b);
