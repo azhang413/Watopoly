@@ -1,6 +1,7 @@
 #include "square.h"
 #include "player.h"
 #include "building.h"
+#include "observer.h"
 
 Building* Square::getBuilding() {
     return b;
@@ -8,6 +9,21 @@ Building* Square::getBuilding() {
 
 SpecialType Square::checkType() {
     return type;
+}
+
+void Square::addPlayer(Player* p) {
+    players.emplace_back(p);
+    this->notifyObservers();
+}
+
+void Square::removePlayer(Player* p) {
+    for (auto i = players.begin(); i != players.end(); ++i) {
+        if (*i == p) {
+            players.erase(i);
+            break;
+        }
+    }
+    this->notifyObservers();
 }
 
 Square::~Square() {
@@ -20,7 +36,12 @@ Info Square::getInfo() const{
         i.players.push_back(it->p); // turn players into character pieces (encapsulation)
     }
 
-    i.improvements = b->getImprovements();
+    if (type == SpecialType::Academic || type == SpecialType::Residence || type == SpecialType::Gym) {
+        i.improvements = b->getImprovements();
+    } else {
+        i.improvements = -1;
+    }
+        
 
     return i;
 }

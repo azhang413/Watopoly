@@ -1,12 +1,12 @@
 3
 Isaac G 0 1500 2
 Aaron $ 1 2000 6
-Rahel S 2 30000 18
+Rahel S 2 30000 18 2
 AL BANK 0
 ML BANK 0
-MKV Aaron
-ECH Rahel
-PAS Isaac
+MKV Aaron 0
+ECH Rahel 0
+PAS Isaac 0
 HH BANK 0
 PAC Aaron 0
 RCH BANK 0

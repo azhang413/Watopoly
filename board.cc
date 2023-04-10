@@ -1,5 +1,6 @@
 #include <map>
 #include <string>
+#include <sstream>
 #include <fstream>
 #include "board.h"
 #include "building.h"
@@ -15,14 +16,14 @@ int getInd(vector<string> v, string s) {
     return -1;
 }
 
-void Tokenize(string str, vector<string> &out, const string delim) {
-    int start = 0;
-    int end = str.find(delim);
-    while (end != -1) {
-        out.push_back(str.substr(start, end - start));
-        start = end + delim.size();
-        end = str.find(delim, start);
+vector<string> Tokenize(string str) {
+    vector<string> out{};
+    istringstream iss{str};
+    string word;
+    while (iss >> word) {
+        out.push_back(word);
     }
+    return out;
 }
 
 map<string, SpecialType> constructBoard = {
@@ -97,7 +98,6 @@ vector<string> squareOrder {
     "V1",
     "PHYS",
     "B1",
-    "B2",
     "CIF",
     "B2",
     "GO TO TIMS",
@@ -124,187 +124,243 @@ vector<int> theBoard::calcCoords(int order) {
         case 1: // OSAP
             coords[2] = 53;
             coords[3] = 91;
+            break;
         case 2:
             coords[0] = 51;
             coords[1] = 82;
             coords[2] = 54;
             coords[3] = 82;
+            break;
         case 3:
             coords[2] = 52;
             coords[3] = 73;
+            break;
         case 4:
             coords[0] = 51;
             coords[1] = 64;
             coords[2] = 54;
             coords[3] = 64;
+            break;
         case 5:
             coords[2] = 52;
             coords[3] = 55;
+            break;
         case 6:
             coords[2] = 52;
             coords[3] = 46;
+            break;
         case 7:
             coords[0] = 51;
             coords[1] = 37;
             coords[2] = 54;
             coords[3] = 37;
+            break;
         case 8:
             coords[2] = 53;
             coords[3] = 28;
+            break;
         case 9:
             coords[0] = 51;
             coords[1] = 19;
             coords[2] = 54;
             coords[3] = 19;
+            break;
         case 10:
             coords[0] = 51;
             coords[1] = 10;
             coords[2] = 54;
             coords[3] = 10;
+            break;
         case 11:
             coords[2] = 53;
             coords[3] = 1;
+            break;
         case 12:
             coords[0] = 46;
             coords[1] = 1;
             coords[2] = 49;
             coords[3] = 1;
+            break;
         case 13:
             coords[2] = 42;
             coords[3] = 1;
+            break;
         case 14:
             coords[0] = 36;
             coords[1] = 1;
             coords[2] = 39;
             coords[3] = 1;
+            break;
         case 15:
             coords[0] = 31;
             coords[1] = 1;
             coords[2] = 34;
             coords[3] = 1;
+            break;
         case 16:
             coords[2] = 27;
             coords[3] = 1;
+            break;
         case 17:
             coords[0] = 21;
             coords[1] = 1;
             coords[2] = 24;
             coords[3] = 1;
+            break;
         case 18:
             coords[2] = 17;
             coords[3] = 1;
+            break;
         case 19:
             coords[0] = 11;
             coords[1] = 1;
             coords[2] = 14;
             coords[3] = 1;
+            break;
         case 20:
             coords[0] = 6;
             coords[1] = 1;
             coords[2] = 9;
             coords[3] = 1;
+            break;
         case 21:
             coords[2] = 3;
             coords[3] = 1;
+            break;
         case 22:
             coords[0] = 1;
             coords[1] = 10;
             coords[2] = 4;
             coords[3] = 10;
+            break;
         case 23:
             coords[2] = 3;
             coords[3] = 19;
+            break;
         case 24:
             coords[0] = 1;
             coords[1] = 28;
             coords[2] = 4;
             coords[3] = 28;
+            break;
         case 25:
             coords[0] = 1;
             coords[1] = 37;
             coords[2] = 4;
             coords[3] = 37;
+            break;
         case 26:
             coords[2] = 2;
             coords[3] = 46;
+            break;
         case 27:
             coords[0] = 1;
             coords[1] = 55;
             coords[2] = 4;
             coords[3] = 55;
+            break;
         case 28:
             coords[0] = 1;
             coords[1] = 64;
             coords[2] = 4;
             coords[3] = 64;
+            break;
         case 29:
             coords[2] = 1;
             coords[3] = 73;
+            break;
         case 30:
             coords[0] = 1;
             coords[1] = 82;
             coords[2] = 4;
             coords[3] = 82;
+            break;
         case 31:
             coords[2] = 3;
             coords[3] = 91;
+            break;
         case 32:
             coords[0] = 6;
             coords[1] = 91;
             coords[2] = 8;
             coords[3] = 91;
+            break;
         case 33:
             coords[0] = 11;
             coords[1] = 91;
             coords[2] = 14;
             coords[3] = 91;
+            break;
         case 34:
             coords[2] = 17;
             coords[3] = 91;
+            break;
         case 35:
             coords[0] = 21;
             coords[1] = 91;
             coords[2] = 24;
             coords[3] = 91;
+            break;
         case 36:
             coords[2] = 27;
             coords[3] = 91;
+            break;
         case 37:
             coords[2] = 33;
             coords[3] = 91;
+            break;
         case 38:
             coords[0] = 36;
             coords[1] = 91;
             coords[2] = 39;
             coords[3] = 91;
+            break;
         case 39:
             coords[2] = 43;
             coords[3] = 91;
+            break;
         case 40:
+            cout << "this" << endl;
             coords[0] = 46;
             coords[1] = 91;
             coords[2] = 49;
             coords[3] = 91;
+            break;
     }
     return coords;
 }
 
 
 void theBoard::init(const string & filename, int numPlayers) {
-    ifstream f{filename};
-    for (int i = 0; i < numPlayers; ++i) {continue;}
-    this->init();
+    bank = new Player{"BANK", 'W'};
     string s;
+    ifstream f{filename};
+    getline(f, s);
+    for (int i = 0; i < numPlayers; ++i) {
+        getline(f, s);
+    }
+    this->init();
     vector<string> line;
     while (getline(f, s)) {
+        line = Tokenize(s);
         string sq = line[0];
-        Tokenize(s, line);
         Square* newSq;
         int ind = getInd(squareOrder, line[0]);
         vector<int> coords = calcCoords(ind + 1);
         if (constructBoard[sq] == SpecialType::Academic) {
             // constructBoard with custom inputs
-            Academic *newAc = new Academic{sq, line[1]};
+            Academic *newAc = new Academic{sq, stoi(line[2])};
+            Player *owner;
+            if (line[1] == "BANK") {
+                owner = bank;
+            } else {
+                for (auto p : players) {
+                    if (p->name == line[1]) {
+                        owner = p;
+                    }
+                }
+            }
+            newAc->setOwner(owner);
             newSq = new Square{coords[0], coords[1], coords[2], coords[3], constructBoard[sq], newAc};
         } else if (constructBoard[sq] == SpecialType::Residence) {
             // constructBoard with custom inputs
@@ -316,12 +372,19 @@ void theBoard::init(const string & filename, int numPlayers) {
             newSq = new Square(coords[0], coords[1], coords[2], coords[3], constructBoard[sq], newGym);
         }
         delete this->squares[ind];
+        newSq->attach(td);
+        newSq->notifyObservers();
         this->squares[ind] = newSq;
+    }
+    for (auto p : players) {
+        this->squares[0]->removePlayer(p);
+        this->squares[p->square]->addPlayer(p);
     }
 }
 
 
 void theBoard::init() {
+    bank = new Player{"BANK", 'W'};
     for (size_t i = 0; i < squareOrder.size(); ++i) {
         string sq = squareOrder[i];
         Square * newSq;
@@ -338,8 +401,14 @@ void theBoard::init() {
         } else {
             newSq = new Square(coords[0], coords[1], coords[2], coords[3], constructBoard[sq]);
         }
-        this->squares.push_back(newSq);
+        newSq->attach(td);
+        this->squares.emplace_back(newSq);
     }
+    for (auto p : players) {
+        this->squares[0]->addPlayer(p);
+    }
+    this->squares[0]->notifyObservers();
+
 }
 
 ostream &operator<<(ostream &out, const theBoard &b) {

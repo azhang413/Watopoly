@@ -32,9 +32,9 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < numPlayers; ++i) {
             getline(f, s);
             vector<string> line;
-            Tokenize(s, line);
+            line = Tokenize(s);
             Player *np;
-            string name = line[0];
+            string name = line[0];   
             if (line.size() == 6) {
                 np = new Player{name, stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1][0], stoi(line[5])};
             }
@@ -55,10 +55,10 @@ int main(int argc, char* argv[]) {
             cin >> playerName;
             cout <<  "Available Pieces: ";
             for (auto i: pieces) {cout << "[" << i << "] ";}
-            while(true) {
-                cout << playerName << " choose a piece: " << endl;
-                cin >> chosenPiece;
-            }
+            //while(true) {
+            cout << playerName << " choose a piece: " << endl;
+            cin >> chosenPiece;
+            //}
             Player *np = new Player{playerName, chosenPiece};
             players.emplace_back(np);
         }
@@ -77,6 +77,7 @@ int main(int argc, char* argv[]) {
     }
     cout << board;
     // start game
+    /*
     while (cin >> cmd) {
         cout << board << endl;
         if (cmd == "roll") {
@@ -119,4 +120,5 @@ int main(int argc, char* argv[]) {
             cin >> filename;
         }
     }
+    */
 }
