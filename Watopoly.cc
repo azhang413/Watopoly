@@ -10,14 +10,14 @@
 
 using namespace std;
 
-class Players
+class Player;
 
-int main(int argc, char* argv[]) {
+int main(int argc, char** argv) {
 
     const string True{"true"};
     const string False{"false"};
     int numPlayers;
-    vector<Players> players;
+    vector<Player*> players;
     string cmd;
     int curTurn = 0;
     vector<int> diceVec{1,2,3,4,5,6};
@@ -25,26 +25,27 @@ int main(int argc, char* argv[]) {
     Shuffle dice2{diceVec};
 
     // setup game
-    if (argv[1] == True) {\
+    if (argv[1] == True) {
         // load game 
         string s;
-        ifstream f{agrv[2]};
+        ifstream f{argv[2]};
         getline(f, s);
         numPlayers = stoi(s);
         for (int i = 0; i < numPlayers; ++i) {
-            getline(f, s)
+            getline(f, s);
             vector<string> line;
             Tokenize(s, line);
-            if (line.length() == 6) {
-                Player *np = new Player{line[0], stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1], stoi(line[5])};
+            Player *np;
+            if (line.size() == 6) {
+                np = new Player{line[0], stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1][0], stoi(line[5])};
             }
             else {
-                Player *np = new Player{line[0], stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1], 0};
+                np = new Player{line[0], stoi(line[3]), stoi(line[4]), stoi(line[2]), line[1][0], 0};
             }
-            players.push_back(np);
+            players.push_back(np); 
         }
         theBoard board{players};
-        board.init(f);
+        board.init(argv[2], numPlayers);
     } else {
         char chosenPiece;
         string playerName;

@@ -1,23 +1,16 @@
 #include <map>
 #include <string>
-#include <iostream>
 #include <fstream>
 #include "board.h"
-#include "square.h"
-#include "display.h"
+#include "building.h"
 
 using namespace std;
 
 int getInd(vector<string> v, string s) {
-    auto it = find(v.begin(), v.end(), s);
-    if (it != v.end()) 
-    {
-        int index = it - v.begin();
-        return index;
+    for (int i = 0; i < v.size(); ++i) {
+        if ( v[i] == s) return i;
     }
-    else {
-        return -1;
-    }
+    return -1;
 }
 
 void Tokenize(string str, vector<string> &out, const string delim = " ") {
@@ -30,7 +23,7 @@ void Tokenize(string str, vector<string> &out, const string delim = " ") {
     }
 }
 
-const map<string, SpecialType> construct = {
+map<string, SpecialType> construct = {
     {"COLLECT OSAP", SpecialType::Osap},
     {"AL", SpecialType::Academic},
     {"SLC", SpecialType::SLC},
@@ -73,7 +66,7 @@ const map<string, SpecialType> construct = {
     {"DC", SpecialType::Academic}
 };
 
-const vector<string> squareOrder{
+vector<string> squareOrder {
     "COLLECT OSAP",
     "AL",
     "SLC",
@@ -115,32 +108,36 @@ const vector<string> squareOrder{
     "MC",
     "COOP FEE",
     "DC"
-}
+};
 
-theBoard::theBoard(vector<Player> players): players{players} {
+theBoard::theBoard(vector<Player*> players): players{players} {
     Display *newDisplay = new Display{};
     td = newDisplay;
 }
 
-void theBoard::init(ifstream f) {
+void theBoard::init(const string & filename, int numPlayers) {
+    ifstream f{filename};
+    for (int i = 0; i < numPlayers; ++i) {continue;}
     this->init();
     string s;
     vector<string> line;
     while (getline(f, s)) {
+        string sq = line[0];
         Tokenize(s, line);
+        Square* newSq;
         int ind = getInd(squareOrder, line[0]);
         if (construct[sq] == SpecialType::Academic) {
             // construct with custom inputs
-            Academic *newAc = new Academic(sw);
-            Square *newSq = new Square{construct[sq], newAc};
+            Academic *newAc = new Academic{sq};
+            newSq = new Square{construct[sq], newAc};
         } else if (construct[sq] == SpecialType::Residence) {
             // construct with custom inputs
             Residence *newRes = new Residence(sq);
-            Square *newSq = new Square{construct[sq], newRes};
+            newSq = new Square{construct[sq], newRes};
         } else if (construct[sq] == SpecialType::Gym) {
             // construct with custom inputs
             Gym *newGym = new Gym(sq);
-            Square *newSq = new Square(construct[sq], newGym);
+            newSq = new Square(construct[sq], newGym);
         }
         delete this->squares[ind];
         this->squares[ind] = newSq;
@@ -149,17 +146,18 @@ void theBoard::init(ifstream f) {
 
 void theBoard::init() {
     for (auto sq : squareOrder) {
+        Square * newSq;
         if (construct[sq] == SpecialType::Academic) {
-            Academic *newAc = new Academic(sw);
-            Square *newSq = new Square{construct[sq], newAc};
+            Academic *newAc = new Academic(sq);
+            newSq = new Square{construct[sq], newAc};
         } else if (construct[sq] == SpecialType::Residence) {
             Residence *newRes = new Residence(sq);
-            Square *newSq = new Square{construct[sq], newRes};
+            newSq = new Square{construct[sq], newRes};
         } else if (construct[sq] == SpecialType::Gym) {
             Gym *newGym = new Gym(sq);
-            Square *newSq = new Square(construct[sq], newGym);
+            newSq = new Square(construct[sq], newGym);
         } else {
-            Square *newSq = new Square(construct[sq]);
+            newSq = new Square(construct[sq]);
         }
         this->squares.push_back(newSq);
     }
@@ -167,6 +165,7 @@ void theBoard::init() {
 
 ostream &operator<<(ostream &out, const theBoard &b) {
     out << *b.td;
+    return out;
 }
 
 
