@@ -168,9 +168,8 @@ void Academic::setOwner(Player* buyer) {
     buyer->acb[index].push_back(this); // put into correct monopoly
 }
 
-void Academic::charge(Player* curr) const {
-    curr->money -= tuition; // subtract from current player's balance
-    owner->money += tuition; // add to owner's money
+int Academic::getCharge() const {
+    return tuition; // add to owner's money
 }
 
 
@@ -213,9 +212,8 @@ void Residence::setOwner(Player* buyer) {
     }
 }
 
-void Residence::charge(Player* curr) const {
-    curr->money -= rent; // subtract from current player's balance
-    owner->money += rent; // add to owner's money
+int Residence::getCharge() const {
+    return rent;
 }
 
 Residence::Residence(const string name): Building{name, 200} {}
@@ -244,7 +242,7 @@ void Gym::setOwner(Player* buyer) {
 
 }
 
-void Gym::charge(Player* curr) const {
+int Gym::getCharge() const {
     vector<int> diceVec{1,2,3,4,5,6};
     Shuffle Dice1{diceVec};
     Shuffle Dice2{diceVec};
@@ -254,8 +252,7 @@ void Gym::charge(Player* curr) const {
 
     int amount = (val1 + val2) * multiplier;
 
-    curr->money -= amount; // subtract from current player's balance
-    owner->money += amount; // add to owner's money
+    return amount;
 
 }
 
