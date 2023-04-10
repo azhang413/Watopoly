@@ -464,7 +464,7 @@ void theBoard::trade(Player* cur, Player *other, string give, string receive) {
 
     // Error Checking
 
-    if ((isBuilding1 == isBuilding2) == false) {
+    if ((isBuilding1== false) && (isBuilding2 == false)) {
         cout << "Trade Unsuccessful. Error: 'money -> money' invalid trade" << endl;
         return; // exit 
     } else if (isBuilding1 && !(isBuilding2)) { // building -> money: use give and int2
@@ -479,7 +479,7 @@ void theBoard::trade(Player* cur, Player *other, string give, string receive) {
         if (other->money >= int2) { // other's money
             funds = true;
         } else {
-            cout << "Trade Unsucessful. Error: '" << other->name << ".money < receive' - "<< other->name << " does not have enough funds." << endl;
+            cout << "Trade Unsuccessful. Error: '" << other->name << ".money < receive' - "<< other->name << " does not have enough funds." << endl;
             return; // exit
         }
 
@@ -490,7 +490,7 @@ void theBoard::trade(Player* cur, Player *other, string give, string receive) {
         int buildingSquare = getInd(squareOrder, give);
 
         if (buildingSquare == -1) { // invalid building name
-            cout << "Building not found" << endl;
+            cout << "Trade Unsuccessul. Building not found." << endl;
             return;
         }
         // buiding found 
@@ -500,14 +500,14 @@ void theBoard::trade(Player* cur, Player *other, string give, string receive) {
         if (ownsBuilding) { // if owned then yes, if not abort
             cout << "Building is Owned by " << cur->name << "." << endl;
         } else {
-            cout << "Trade Unsucessful. Error: 'cur is not owner' - " << cur->name << " is not the owner of this building." << endl;
+            cout << "Trade Unsuccessful. Error: 'cur is not owner' - " << cur->name << " is not the owner of this building." << endl;
             return;
         }
 
-        if (squares[buildingSquare]->getBuilding()->checkOwner(cur) == 0) {
+        if (squares[buildingSquare]->getBuilding()->getImprovements() == 0) {
             noImprovements = true;
         } else {
-            cout << "Trade Unsucessful. Error: 'building improvements > 0' - Building cannot have any improvements." << endl;
+            cout << "Trade Unsuccessful. Error: 'building improvements > 0' - Building cannot have any improvements." << endl;
             return;
         }
 
@@ -515,16 +515,137 @@ void theBoard::trade(Player* cur, Player *other, string give, string receive) {
             cout << "Trade Sent Successfully" << endl;
             building4money = true; // give and int2 are valid 
         } else {
-            cout << "Trade Unsucessful. Error: 'Unknown' Something went wrong. Please try again." << endl;
+            cout << "Trade Unsuccessful. Error: 'Unknown' Something went wrong. Please try again." << endl;
             return; // exit
         }
 
     } else if (!(isBuilding1) && isBuilding2) { // money -> building: use int1 and receive
+        // check enough money from cur
+        // check building belongs to other
+        // then check improvements
+        // Keep track of offer.
+        bool funds = false;
+        bool ownsBuilding = false;
+        bool noImprovements = false; // if false, abort
 
-    } else if ((isBuilding1 == isBuilding2)  == true) { // building -> building: use give and receive
+        if (cur->money >= int1) { // other's money
+            funds = true;
+        } else {
+            cout << "Trade Unsuccessful. Error: '" << cur->name << ".money < give' - "<< cur->name << " does not have enough funds." << endl;
+            return; // exit
+        }
 
+        // check if other owns building
+        // get index from squareorder (input in name) -> check if -1
+        // squares[index].getbuilding->checkowner(curr) -> if true check improvements. 
+
+        int buildingSquare = getInd(squareOrder, receive);
+
+        if (buildingSquare == -1) { // invalid building name
+            cout << "Trade Unsuccessul. Building not found." << endl;
+            return;
+        }
+        // buiding found 
+
+        ownsBuilding = squares[buildingSquare]->getBuilding()->checkOwner(other); // determines if owned or not.
+
+        if (ownsBuilding) { // if owned then yes, if not abort
+            cout << "Building is Owned by " << other->name << "." << endl;
+        } else {
+            cout << "Trade Unsuccessful. Error: 'other is not owner' - " << other->name << " is not the owner of this building." << endl;
+            return;
+        }
+
+        if (squares[buildingSquare]->getBuilding()->getImprovements() == 0) {
+            noImprovements = true;
+        } else {
+            cout << "Trade Unsuccessful. Error: 'building improvements > 0' - Building cannot have any improvements." << endl;
+            return;
+        }
+
+        if (noImprovements && ownsBuilding && funds) {
+            cout << "Trade Sent Successfully" << endl;
+            money4building = true; // give and int2 are valid 
+        } else {
+            cout << "Trade Unsuccessful. Error: 'Unknown' Something went wrong. Please try again." << endl;
+            return; // exit
+        }
+
+    } else if ((isBuilding1== true) && (isBuilding2 == true)) { // building -> building: use give and receive
+        // check enough money from cur
+        // check building belongs to other
+        // then check improvements
+        // Keep track of offer.
+        bool ownsBuilding1 = false;
+        bool ownsBuilding2 = false;
+        bool noImprovements1 = false; // if false, abort
+        bool noImprovements2 = false; // if false, abort
+
+        // check if cur owns building
+        // get index from squareorder (input in name) -> check if -1
+        // squares[index].getbuilding->checkowner(curr) -> if true check improvements. 
+
+        int buildingSquare1 = getInd(squareOrder, give);
+
+        if (buildingSquare1 == -1) { // invalid building name
+            cout << "Trade Unsuccessul Building not found." << endl;
+            return;
+        }
+        // buiding found 
+
+        ownsBuilding1 = squares[buildingSquare1]->getBuilding()->checkOwner(cur); // determines if owned or not.
+
+        if (ownsBuilding1) { // if owned then yes, if not abort
+            cout << "Building is Owned by " << cur->name << "." << endl;
+        } else {
+            cout << "Trade Unsuccessful. Error: 'cur is not owner' - " << cur->name << " is not the owner of this building." << endl;
+            return;
+        }
+
+        if (squares[buildingSquare1]->getBuilding()->getImprovements() == 0) {
+            noImprovements1 = true;
+        } else {
+            cout << "Trade Unsuccessful. Error: 'building improvements > 0' - Building cannot have any improvements." << endl;
+            return;
+        }
+
+        // now we check other's building (receive)
+
+        int buildingSquare2 = getInd(squareOrder, receive);
+
+        if (buildingSquare2 == -1) { // invalid building name
+            cout << "Trade Unsuccessul Building not found." << endl;
+            return;
+        }
+        // buiding found 
+
+        ownsBuilding2 = squares[buildingSquare2]->getBuilding()->checkOwner(other); // determines if owned or not.
+
+        if (ownsBuilding2) { // if owned then yes, if not abort
+            cout << "Building is Owned by " << other->name << "." << endl;
+        } else {
+            cout << "Trade Unsuccessful. Error: 'cur is not owner' - " << other->name << " is not the owner of this building." << endl;
+            return;
+        }
+
+        if (squares[buildingSquare2]->getBuilding()->getImprovements() == 0) {
+            noImprovements2 = true;
+        } else {
+            cout << "Trade Unsuccessful. Error: 'building improvements > 0' - Building cannot have any improvements." << endl;
+            return;
+        }
+
+        if ((ownsBuilding1 == true) && (ownsBuilding2 == true) && (noImprovements1 == true) && (noImprovements2 == true)) {
+            cout << "Trade Sent Successfully" << endl;
+            building4building = true; // receive and give are valid 
+        } else {
+            cout << "Trade Unsuccessful. Error: 'Unknown' Something went wrong. Please try again." << endl;
+            return; // exit
+        }
+        
+        
     } else { // invalid input or some other error
-        cout << "Trade Unsucessful. Error: 'Unknown' Something went wrong. Please try again." << endl;
+        cout << "Trade Unsuccessful. Error: 'Unknown' Something went wrong. Please try again." << endl;
         return; // exit
     }
 
@@ -551,16 +672,45 @@ void theBoard::trade(Player* cur, Player *other, string give, string receive) {
                     // detaching building from cur
                     int buildingSquare = getInd(squareOrder, give);
                     squares[buildingSquare]->getBuilding()->removeOwner(); // removing old owner;
-                    squares[buildingSquare]->getBuilding()->setOwner(cur);
+                    cout << "Removed Owner" << endl;
+                    squares[buildingSquare]->getBuilding()->setOwner(other);
+                    cout << "Updated Owner" << endl;
 
                     // done
                     cout << "Trade Successful! Ending Trade." << endl;
                 } else if (money4building) {
+                    // exchanging money
+                    other->money += int1; 
+                    cur->money -= int1;
 
+                    // detaching building from other
+                    int buildingSquare = getInd(squareOrder, receive);
+                    squares[buildingSquare]->getBuilding()->removeOwner(); // removing old owner;
+                    cout << "Removed Owner" << endl;
+                    squares[buildingSquare]->getBuilding()->setOwner(cur);
+                    cout << "Updated Owner" << endl;
+
+                    // done
+                    cout << "Trade Successful! Ending Trade." << endl;
                 } else if (building4building) {
+                    // detaching building from cur
+                    int buildingSquare1 = getInd(squareOrder, give);
+                    squares[buildingSquare1]->getBuilding()->removeOwner(); // removing old owner;
+                    cout << "Removed Owner" << endl;
+                    squares[buildingSquare1]->getBuilding()->setOwner(other);
+                    cout << "Updated Owner" << endl;
 
+                     // detaching building from other
+                    int buildingSquare2 = getInd(squareOrder, receive);
+                    squares[buildingSquare2]->getBuilding()->removeOwner(); // removing old owner;
+                    cout << "Removed Owner" << endl;
+                    squares[buildingSquare2]->getBuilding()->setOwner(cur);
+                    cout << "Updated Owner" << endl;
+
+                     // done
+                    cout << "Trade Successful! Ending Trade." << endl;
                 } else {
-                    cout << "Trade Unsucessful. Error: 'Unknown' Something went wrong. Please try again." << endl;
+                    cout << "Trade Unsuccessful. Error: 'Unknown' Something went wrong. Please try again." << endl;
                 }
 
                 return;
