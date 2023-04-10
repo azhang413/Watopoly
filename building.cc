@@ -3,6 +3,7 @@
 #include "player.h"
 #include <map>
 #include <exception>
+#include <iostream> //delete after
 
 using namespace std;
 
@@ -149,10 +150,10 @@ void Academic::sellImprovements(int numOfImprovements) { // board checks monopol
 }
 
 void Academic::setOwner(Player* buyer) {
-    Building::owner = buyer; // buyer -> owner
+    owner = buyer; // buyer -> owner
      // adds current residence to owner's list of owned residences
     int index = construct[getName()][0] - 1;
-    owner->acb[index].push_back(this); // put into correct monopoly
+    buyer->acb[index].push_back(this); // put into correct monopoly
 }
 
 void Academic::charge(Player* curr) const {

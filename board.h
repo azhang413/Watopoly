@@ -8,12 +8,13 @@
 #include "display.h"
 #include "shuffle.h"
 
-void Tokenize(std::string str, std::vector<std::string> &out, const std::string delim = " ");
+std::vector<std::string> Tokenize(std::string str);
 int getInd(std::vector<std::string> v, std::string s);
 
 class theBoard {
     std::vector<Square*> squares;
     std::vector<Player*> players;
+    Player* bank;
     Display *td;
     void auction(Building *b);
     std::vector<int> calcCoords(int order);

@@ -34,20 +34,24 @@ ostream &operator<<(ostream &out, const Display &dis){
  void Display::notify(Subject<Info> &s) {
     int r = s.getInfo().PlayerRow;
     int c = s.getInfo().PlayerCol;
-    int i = 0;
-    int j = 0;
-
-    for (char plyr : s.getInfo().players) {
-        if (j == 8) { 
-            j = 0;
-            ++i;
+    vector<char> players = s.getInfo().players;
+    int length = players.size();
+    
+    for (int i = 0; i < 8; ++i) {
+        if (i < length) {
+            this->text[r][c + i] = players[i];
+        } else { 
+            this->text[r][c + i] = ' ';
         }
-        text[r + i][c + j] = plyr;
-        ++j;
     }
     if (s.getInfo().BuildingCol != -1 && s.getInfo().BuildingRow != -1) {
-        for (int k=0; k < s.getInfo().improvements; ++k) {
-            text[s.getInfo().BuildingRow][s.getInfo().BuildingCol] = 'I';
+        for (int k = 0; k < 5; ++k) {
+            if (k < s.getInfo().improvements) {
+                this->text[s.getInfo().BuildingRow][s.getInfo().BuildingCol + k] = 'I';
+            } else {
+                this->text[s.getInfo().BuildingRow][s.getInfo().BuildingCol + k] = ' ';
+            }
+            
         }
     }
  }

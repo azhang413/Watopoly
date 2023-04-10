@@ -21,6 +21,8 @@ class Square : public Subject<Info> {
         Building *getBuilding();
         SpecialType checkType();
         Info getInfo() const override;
+        void addPlayer(Player* p);
+        void removePlayer(Player* p);
         ~Square() override; 
 };
 
