@@ -44,15 +44,21 @@ int main(int argc, char* argv[]) {
             players.emplace_back(np); 
         }
     } else {
+        // new game 
+        vector<char> pieces{'G', 'B', 'D', 'P', 'S', '$', 'L', 'T'};
         char chosenPiece;
         string playerName;
         cout << "Welcome to Watopoly! How many players?" << endl;
         cin >> numPlayers;
         for (int i = 0; i < numPlayers; ++i) {
-            cout << "Player" << i + 1 << " what is your name?: "<< endl;
+            cout << "Player " << i + 1 << " what is your name?: "<< endl;
             cin >> playerName;
-            cout << playerName << " choose a piece: " << endl;
-            cin >> chosenPiece;
+            cout <<  "Available Pieces: ";
+            for (auto i: pieces) {cout << "[" << i << "] ";}
+            while(true) {
+                cout << playerName << " choose a piece: " << endl;
+                cin >> chosenPiece;
+            }
             Player *np = new Player{playerName, chosenPiece};
             players.emplace_back(np);
         }

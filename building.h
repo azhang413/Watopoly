@@ -33,7 +33,7 @@ class Academic : public Building {
         int tuition;
         int improvements;
     public:
-        Academic(const std::string name); // ctor for construction
+        Academic(const std::string name, int improvements = 0); // ctor for construction
         void setOwner(Player* buyer) override;
         int getImprovements() const override; 
         void charge(Player * curr) const override;

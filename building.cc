@@ -162,11 +162,11 @@ void Academic::charge(Player* curr) const {
 
 
 
-Academic::Academic (const string name) : Building{name} {
+Academic::Academic (const string name, int improvements) : Building{name}, improvements{improvements} {
     m = intToMono[construct[name][0]]; // const
     this->setCost(construct[name][1]); // const but priv
     improveCost = construct[name][2]; // const
-    tuition = improveMap[name][0];
+    tuition = improveMap[name][improvements];
 }
 
 
