@@ -119,49 +119,10 @@ int main(int argc, char* argv[]) {
     } else {
         board.init();
     }
-    cout << board;
+    cout << board; 
     // start game
+
     while (cin >> cmd) {
-        cout << board << endl;
-        if (cmd == "roll") {
-            // implement roll with shuffle
-            int steps = dice1.roll() + dice2.roll();
-            board.move(players[curTurn], steps);
-            
-        } else if (cmd == "next") {
-            // pass turn to next player
-            ++curTurn;
-            if (curTurn == numPlayers) curTurn = 0;
-        } else if (cmd == "trade") {
-            string tradeTo;
-            cin >> tradeTo;
-            string give;
-            cin >> give;
-            string price;
-            cin >> price;
-            // offer trade
-        } else if (cmd == "improve") {
-            string property;
-            cin >> property;
-            string buyorsell;
-            cin >> buyorsell;
-            // buy or sell improvment for buidling
-        } else if (cmd == "mortgage") {
-            string property;
-            cin >> property;
-        } else if (cmd == "unmortgage") {
-            string property;
-            cin >> property;
-        } else if (cmd == "bankrupt") {
-            string property;
-            cin >> property;
-        } else if (cmd == "assets") {
-            // display assets
-        } else if (cmd == "all") {
-            // display assets of all players
-        } else if (cmd == "save") {
-            string filename;
-            cin >> filename;
-        }
+        
     }
 }
