@@ -121,13 +121,13 @@ int main(int argc, char* argv[]) {
     }
     cout << board;
     // start game
-    /*
     while (cin >> cmd) {
         cout << board << endl;
         if (cmd == "roll") {
             // implement roll with shuffle
             int steps = dice1.roll() + dice2.roll();
             board.move(players[curTurn], steps);
+            
         } else if (cmd == "next") {
             // pass turn to next player
             ++curTurn;
@@ -164,5 +164,4 @@ int main(int argc, char* argv[]) {
             cin >> filename;
         }
     }
-    */
 }

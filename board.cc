@@ -408,7 +408,31 @@ void theBoard::init() {
         this->squares[0]->addPlayer(p);
     }
     this->squares[0]->notifyObservers();
+}
 
+void theBoard::move(Player* p, int steps) {
+    squares[p->square]->removePlayer(p);
+    p->square += steps;
+    squares[p->square]->addPlayer(p);
+    Building* curB = squares[p->square]->getBuilding();
+    if (curB->checkOwner(bank)) {
+        // ask to buy
+        char resp;
+        cout << "Would you like to buy this property? {y / n}" << endl;
+        cin >> resp;
+        if (resp == 'y') {
+            curB->setOwner(p)
+            // charge cost?
+        } else {
+            // start auction
+        }
+    } else if (!curB->checkOwner(p)) {
+        // charge rent
+        curB->charge(p);
+        if (p->money < 0) { 
+            //bankrupt 
+        }
+    }
 }
 
 ostream &operator<<(ostream &out, const theBoard &b) {
