@@ -476,6 +476,27 @@ void theBoard::unmortgage(Player* cur, string b) {
     }
 }
 
+void theBoard::assets(Player* cur) {
+    cout << cur->name << "'s assets:" << endl;
+    cout << "Money: " << cur->money << endl;
+    cout << "Tims Cups: " << cur->timsCups << endl;
+    cout << "Owned Buildings: ";
+    for (size_t i = 0; i < cur->acb.size(); ++i) {
+        for (auto ac : cur->acb[i]) {
+            if (!ac->mortgaged) cout << ac->getName() << " ";
+        }
+    }
+    cout << endl;
+    for (auto res : cur->resb) {
+        if (!res->mortgaged) cout << res->getName() << " ";
+    }
+    cout << endl;
+    for (auto gym : cur->gymb) {
+        if (!gym->mortgaged) cout << gym->getName() << " ";
+    }
+    cout << endl;
+}
+
 ostream &operator<<(ostream &out, const theBoard &b) {
     out << *b.td;
     return out;
