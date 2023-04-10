@@ -149,11 +149,11 @@ int Academic::getImprovements() const {
 Academic::~Academic() {}
 
 void Academic::sellImprovements(int numOfImprovements) { // board checks monopoly
-    if (improvements == 0) {
+   if (improvements == 0) {
         throw WTH("No Improvements to Sell");
     } else if (improvements < numOfImprovements) {
         throw WTH("Not Enough Improvements Owned");
-    } else {
+    } else { 
         improvements -= numOfImprovements; // decrease improvements
         owner->money += numOfImprovements * (improveCost/2); // subtract owner's money
         string name = getName(); // gets name of building
@@ -162,10 +162,25 @@ void Academic::sellImprovements(int numOfImprovements) { // board checks monopol
 }
 
 void Academic::setOwner(Player* buyer) {
+    if (owner == buyer) {return;} // do nothing
     owner = buyer; // buyer -> owner
-     // adds current residence to owner's list of owned residences
     int index = construct[getName()][0] - 1;
     buyer->acb[index].push_back(this); // put into correct monopoly
+}
+
+void Academic::removeOwner() {
+    if (owner == nullptr) {return;} // do nothing
+
+    // remove from owner's owned vector 
+    int index = construct[getName()][0] - 1;
+    for (auto i = owner->acb[index].begin(); i != owner->acb[index].end(); ++i) {
+        if (*i == this) { // found, remove
+            owner->acb[index].erase(i);
+            break;
+        }
+    }
+    // set to nullptr-s
+    owner = nullptr;
 }
 
 int Academic::getCharge() const {
@@ -216,6 +231,20 @@ int Residence::getCharge() const {
     return rent;
 }
 
+void Residence::removeOwner() {
+    if (owner == nullptr) {return;} // do nothing
+
+    // remove from owner's owned vector 
+    for (auto i = owner->resb.begin(); i !=  owner->resb.end(); ++i) {
+        if (*i == this) { // found, remove
+            owner->resb.erase(i);
+            break;
+        }
+    }
+    // set to nullptrs
+    owner = nullptr;
+}
+
 Residence::Residence(const string name): Building{name, 200} {}
 
 // Gym
@@ -254,6 +283,20 @@ int Gym::getCharge() const {
 
     return amount;
 
+}
+
+void Gym::removeOwner() {
+    if (owner == nullptr) {return;} // do nothing
+
+    // remove from owner's owned vector 
+    for (auto i = owner->gymb.begin(); i !=  owner->gymb.end(); ++i) {
+        if (*i == this) { // found, remove
+            owner->gymb.erase(i);
+            break;
+        }
+    }
+    // set to nullptrs
+    owner = nullptr;
 }
 
 Gym::Gym(const string name): Building{name, 150} {}

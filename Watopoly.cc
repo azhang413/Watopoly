@@ -119,9 +119,10 @@ int main(int argc, char* argv[]) {
     } else {
         board.init();
     }
-    cout << board; 
+    cout << board;
+    cout << " " << endl;
     // start game
-
+    /*
     Building* landedOn = board.move(players[0], 3);
     board.save("out.txt");
     board.assets(players[1]);
@@ -130,9 +131,11 @@ int main(int argc, char* argv[]) {
     board.mortgage(players[1], "PAC");
     board.unmortgage(players[1], "HH");
     board.unmortgage(players[1], "EV1");
+    */
+    board.all();
+    cout << " " << endl;
+    board.trade(players[0],players[1], "PAS", "PAC");
     //board.unmortgage(players[1], "PAC");
-    cout << board;
-    board.assets(players[1]);
     board.all();
     /*
     while (cin >> cmd) {
