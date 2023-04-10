@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <exception>
+#include <map>
 #include "shuffle.h"
 #include "player.h"
 #include "board.h"
@@ -138,8 +139,63 @@ int main(int argc, char* argv[]) {
     //board.unmortgage(players[1], "PAC");
     board.all();
     /*
-    while (cin >> cmd) {
-        
-    }
     */
+    while (numPlayers > 1) {
+        map<string, bool> cmds = {
+            {"roll",true},
+            {"next",false},
+            {"trade",true},
+            {"improve",true},
+            {"mortgage",true},
+            {"unmortgage",true},
+            {"bankrupt",false},
+            {"assets",true},
+            {"all",true},
+            {"save",true}
+        };
+        string cmd;
+        Player* cur = players[curTurn];
+        while (true) {
+            Building* landed;
+            cout << cur->name << " it's your turn!" << endl;
+            cout << "Available Commands: " << endl;
+            for (auto it = cmds.begin(); it != cmds.end(); ++it) {
+                if (it->second == true) {
+                    cout << "<" << it->first << "> ";
+                }
+            }
+            cin >> cmd;
+            if (cmd == "roll") {
+                if (cur->square == 10 && cur->place != 0) {
+                    if (dice1.roll() == dice2.roll()) {
+                        cout << "Double! roll again to move." << endl;
+                        cur->place = 0;
+                    } else {
+                        cout << "Not a double, try again next turn." << endl;
+                        cmds["roll"] = false;
+                        cmds["next"] = true;
+                        cur->place--;
+                    }
+                } else {
+                    cur->place = 0;
+                    landed = board.move(players[curTurn], dice1.roll() + dice2.roll());
+                    cmds["roll"] = false;
+                    cmds["next"] = true;
+                }
+            } else if (cmd == "next") {
+                break;
+            } else if (cmd == "save") {
+                string file;
+                cin >> file;
+                board.save(file);
+            } else if (cmd == "assets") {
+                board.assets(cur);
+            } else if (cmd == "all") {
+                board.all();
+            }
+        }
+        cout << board;
+        curTurn++;
+        if (curTurn == numPlayers) curTurn = 0;
+   }
 }
