@@ -24,6 +24,7 @@ class theBoard {
         void init(const std::string& name, int numPlayers);
         void move(Player* p, int steps);
         void save(std::string file);
+        void trade(Player* cur, Player* other, string give, string receive);
         ~theBoard() { delete td; }
         // void move(Player *p, int steps);
         friend std::ostream &operator<<(std::ostream &out, const theBoard &b);

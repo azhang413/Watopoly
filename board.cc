@@ -454,6 +454,84 @@ void theBoard::save(string file) {
     f.close();
 }
 
+void theBoard::trade(Player* cur, Player *other, string give, string receive) {
+    istringstream iss1{give};
+    istringstream iss2{receive};
+    int check;
+    
+    bool abort = false;
+    bool found = false;
+    // string string -> check curr player building and check other player building
+    // int string -> check curr player money and check other player building
+    // string int -> check curr player building and check other player money
+    // int int -> abort offer
+
+    // when checking string -> if player does not have building, abort
+    // when checking int -> if player money is not enough, abort
+
+    if (iss1 >> check) { // first is int, second has to be building
+        if (check < cur->money) {
+            cout << "You Do Not Have Enough Money to Complete This Trade." << endl;
+            abort = true;
+        }
+        if (abort == false) {
+            for (int i = 0; i < 8; ++i) { 
+                for (auto j : other->acb[i]) {
+                    if (j->getName == receive) { // check if has improvements
+                        found = true;
+                        if (j->getImprovements) { // abort
+                            cout << "Requested Building Has Improvements." << endl;
+                            abort = true;
+                        } 
+                        break;
+                    }
+                }
+                if (found == true) {break;}
+            }
+        }
+
+        if (found == false && abort == false) {
+             for (auto j : other->resb) {
+                if (j->getName == receive) {
+                    found == true;
+                    break;
+                }
+             }
+        }
+
+        if (found == false && abort == false) {
+             for (auto j : other->gymb) {
+                if (j->getName == receive) {
+                    found == true;
+                    break;
+                }
+             }
+        }
+
+        if (found == true && abort == false) {
+            cout << "Trade Sent Successfully" << endl;
+            cout << "Does " << other->name << " Accept This Trade? (Answer with 'accept' or 'reject')" << endl;
+            string ans;
+            while (cin >> ans) {
+                if (ans == "accept") {
+                    // update 
+                    other->money += check;
+                    
+                } else if (ans == "reject") {
+                    cout << other->name << " Has Rejected Your Trade." << endl;
+                    break;
+                } else {
+                    cout << "Invalid Response, Please Try Again."
+                }
+            }
+        }
+
+
+    } else { // first is string, second can be building or string
+
+    }
+}
+
 ostream &operator<<(ostream &out, const theBoard &b) {
     out << *b.td;
     return out;
