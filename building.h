@@ -16,10 +16,13 @@ class Building { // abstract superclass
         Building(const std::string name, int cost) : name{name}, cost{cost} {} // ctor
         Building(const std::string name) : name{name} {} 
         void setCost(int cost);
-    public: // 
+    public:
+        bool mortgaged = false;
         std::string getName() const;
         virtual void setOwner(Player * buyer) = 0; // when unowned building gets bought -> sets price accordingly
         bool checkOwner(Player * curr) const;
+        int getCost();
+        int nameToMono(std::string name);
         virtual int getImprovements() const;
         std::string getOwner() const;
         virtual ~Building() {};
