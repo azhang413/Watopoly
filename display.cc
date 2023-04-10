@@ -31,9 +31,22 @@ ostream &operator<<(ostream &out, const Display &dis){
 
 
  void Display::notify(Subject<Info> &s) {
-    // I know this is wrong but just a starting point
-    for (Player plyr : s.getInfo().players) {
-        text[s.getInfo().PlayerRow][s.getInfo().PlayerCol] = plyr.p;
+    int r = s.getInfo().PlayerRow;
+    int c = s.getInfo().PlayerCol;
+    int i = 0;
+    int j = 0;
+    for (char plyr : s.getInfo().players) {
+        if (j = 8) { 
+            j = 0;
+            ++i;
+        }
+        text[r + i][c + j] = plyr;
+        ++j;
+    }
+    if (s.getInfo().BuildingCol != -1 && s.getInfo().BuildingRow != -1) {
+        for (int k=0; k < s.getInfo().improvements; ++k) {
+            text[s.getInfo().BuildingRow][s.getInfo().BuildingCol] = 'I';
+        }
     }
  }
 
