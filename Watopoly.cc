@@ -121,8 +121,9 @@ int main(int argc, char* argv[]) {
     }
     cout << board;
     // start game
-    //board.move(players[0], 3);
+    Building* landedOn = board.move(players[0], 3);
     board.save("out.txt");
+    cout << board;
     /*
     while (cin >> cmd) {
         cout << board << endl;
