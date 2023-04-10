@@ -391,12 +391,15 @@ void theBoard::init() {
         vector<int> coords =  calcCoords(i + 1);
         if (constructBoard[sq] == SpecialType::Academic) {
             Academic *newAc = new Academic(sq);
+            newAc->setOwner(bank);
             newSq = new Square{coords[0], coords[1], coords[2], coords[3], constructBoard[sq], newAc};
         } else if (constructBoard[sq] == SpecialType::Residence) {
             Residence *newRes = new Residence(sq);
+            newRes->setOwner(bank);
             newSq = new Square{coords[0], coords[1], coords[2], coords[3], constructBoard[sq], newRes};
         } else if (constructBoard[sq] == SpecialType::Gym) {
             Gym *newGym = new Gym(sq);
+            newGym->setOwner(bank);
             newSq = new Square(coords[0], coords[1], coords[2], coords[3], constructBoard[sq], newGym);
         } else {
             newSq = new Square(coords[0], coords[1], coords[2], coords[3], constructBoard[sq]);
@@ -421,7 +424,7 @@ void theBoard::move(Player* p, int steps) {
         cout << "Would you like to buy this property? {y / n}" << endl;
         cin >> resp;
         if (resp == 'y') {
-            curB->setOwner(p)
+            curB->setOwner(p);
             // charge cost?
         } else {
             // start auction
@@ -433,6 +436,22 @@ void theBoard::move(Player* p, int steps) {
             //bankrupt 
         }
     }
+}
+
+void theBoard::save(string file) {
+    ofstream f{file};
+    f << players.size() << "\n";
+    for (auto p : players) {
+        f << p->name << " " << p->p << " " << p->timsCups << " " << p->money << " " << p->square << " " << p->place << "\n";
+    }
+    for (auto s : squares) {
+        SpecialType curType = s->checkType();
+        if (curType == SpecialType::Academic || curType == SpecialType::Residence || curType == SpecialType::Gym) {
+            Building* curB = s->getBuilding();
+            f << curB->getName() << " " << curB->getOwner() << " " << curB->getImprovements() << "\n";
+        }
+    }
+    f.close();
 }
 
 ostream &operator<<(ostream &out, const theBoard &b) {

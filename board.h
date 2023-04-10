@@ -23,6 +23,7 @@ class theBoard {
         void init();
         void init(const std::string& name, int numPlayers);
         void move(Player* p, int steps);
+        void save(std::string file);
         ~theBoard() { delete td; }
         // void move(Player *p, int steps);
         friend std::ostream &operator<<(std::ostream &out, const theBoard &b);

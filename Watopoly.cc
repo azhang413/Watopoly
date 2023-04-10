@@ -121,6 +121,9 @@ int main(int argc, char* argv[]) {
     }
     cout << board;
     // start game
+    //board.move(players[0], 3);
+    board.save("out.txt");
+    /*
     while (cin >> cmd) {
         cout << board << endl;
         if (cmd == "roll") {
@@ -164,4 +167,5 @@ int main(int argc, char* argv[]) {
             cin >> filename;
         }
     }
+    */
 }
