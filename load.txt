@@ -1,7 +1,7 @@
 3
 Isaac G 0 1500 2
-Aaron $ 1 2000 6
-Rahel S 2 30000 18 2
+Aaron $ 1 2000 10
+Rahel S 2 30000 10 2
 AL BANK 0
 ML BANK 0
 MKV Aaron 0

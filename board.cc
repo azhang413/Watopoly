@@ -788,6 +788,80 @@ void theBoard::all() {
     }
 }
 
+/* void theBoard::bankrupt(Player* cur, Player* owed) {
+    // if possible replace the money exchanges with charge functions
+    if (owed == bank) {
+        cur->money = 0;
+        for (size_t i = 0; i < cur->acb.size(); ++i) {
+            for (auto ac : cur->acb[i]) {
+                ac->mortgaged = false;
+                ac->setOwner(bank);
+                this->auction(ac);
+            }
+        }
+        for (auto res : cur->resb) {
+            res->mortgaged = false;
+            res->setOwner(bank);
+            this->auction(res);
+        }
+        for (auto gym : cur->gymb) {
+            gym->mortgaged = false;
+            gym->setOwner(bank);
+            this->auction(gym);
+        }
+    } else {
+        owed->money += cur->money;
+        cur->money = 0;
+        for (size_t i = 0; i < cur->acb.size(); ++i) {
+            for (auto ac : cur->acb[i]) {
+                if (ac->mortgaged) {
+                    owed->money -= ac->getCost() * 0.1;
+                    cout << "Would you like to unmortgage ";
+                    cout << ac->getName() << "? {y / n}" << endl;
+                    string resp;
+                    cin >> resp;
+                    if (resp == "y") {
+                        owed->money -= ac->getCost() * 0.5;
+                        ac->mortgaged = true;
+                    }
+                }
+                ac->setOwner(owed);
+                this->auction(ac);
+            }
+        }
+        for (auto res : cur->resb) {
+            if (res->mortgaged) {
+                owed->money -= res->getCost() * 0.1;
+                cout << "Would you like to unmortgage ";
+                cout << res->getName() << "? {y / n}" << endl;
+                string resp;
+                cin >> resp;
+                if (resp == "y") {
+                    owed->money -= res->getCost() * 0.5;
+                    res->mortgaged = true;
+                }
+            }
+            res->setOwner(owed);
+            this->auction(res);
+        }
+        for (auto gym : cur->gymb) {
+            if (gym->mortgaged) {
+                cout << "Would you like to unmortgage ";
+                cout << gym->getName() << "? {y / n}" << endl;
+                string resp;
+                cin >> resp;
+                if (resp == "y") {
+                    owed->money -= gym->getCost() * 0.5;
+                    gym->mortgaged = true;
+                }
+                owed->money -= gym->getCost() * 0.1;
+            }
+            gym->setOwner(owed);
+            this->auction(gym);
+        }
+    }
+} */
+
 ostream &operator<<(ostream &out, const theBoard &b) {
     out << *b.td;
     return out;
