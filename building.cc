@@ -17,7 +17,7 @@ class WTH {
 };
 
 int Building::getImprovements() const {
-    return -1;
+    return 0;
 }
 
 bool Building::checkOwner(Player * curr) const {
@@ -30,6 +30,10 @@ void Building::setCost(int cost) {
 
 string Building::getName() const {
     return this->name;
+}
+
+string Building::getOwner() const {
+    return this->owner->name;
 }
 
 // Academic

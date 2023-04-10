@@ -3,3 +3,4 @@ vgcore*
 *.o
 *.d
 Watopoly
+out.txt

@@ -8,6 +8,8 @@
 #include "display.h"
 #include "shuffle.h"
 
+class Building;
+
 std::vector<std::string> Tokenize(std::string str);
 int getInd(std::vector<std::string> v, std::string s);
 
@@ -22,7 +24,9 @@ class theBoard {
         theBoard(std::vector<Player*> players);
         void init();
         void init(const std::string& name, int numPlayers);
-        void move(Player* p, int steps);
+        Building* move(Player* p, int steps);
+        void save(std::string file);
+        void trade(Player* cur, Player* other, std::string give, std::string receive);
         ~theBoard() { delete td; }
         // void move(Player *p, int steps);
         friend std::ostream &operator<<(std::ostream &out, const theBoard &b);

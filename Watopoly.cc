@@ -122,7 +122,12 @@ int main(int argc, char* argv[]) {
     cout << board; 
     // start game
 
+    Building* landedOn = board.move(players[0], 3);
+    board.save("out.txt");
+    cout << board;
+    /*
     while (cin >> cmd) {
         
     }
+    */
 }
