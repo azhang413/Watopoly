@@ -130,6 +130,7 @@ int main(int argc, char* argv[]) {
     board.unmortgage(players[1], "EV1");
     board.unmortgage(players[1], "PAC");
     cout << board;
+    board.assets(players[1]);
     /*
     while (cin >> cmd) {
         cout << board << endl;
