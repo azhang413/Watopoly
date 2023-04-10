@@ -320,7 +320,6 @@ vector<int> theBoard::calcCoords(int order) {
             coords[3] = 91;
             break;
         case 40:
-            cout << "this" << endl;
             coords[0] = 46;
             coords[1] = 91;
             coords[2] = 49;
@@ -347,28 +346,30 @@ void theBoard::init(const string & filename, int numPlayers) {
         Square* newSq;
         int ind = getInd(squareOrder, line[0]);
         vector<int> coords = calcCoords(ind + 1);
+        Player *owner;
+        if (line[1] == "BANK") {
+            owner = bank;
+        } else {
+            for (auto p : players) {
+                if (p->name == line[1]) {
+                    owner = p;
+                }
+            }
+        }
         if (constructBoard[sq] == SpecialType::Academic) {
             // constructBoard with custom inputs
             Academic *newAc = new Academic{sq, stoi(line[2])};
-            Player *owner;
-            if (line[1] == "BANK") {
-                owner = bank;
-            } else {
-                for (auto p : players) {
-                    if (p->name == line[1]) {
-                        owner = p;
-                    }
-                }
-            }
             newAc->setOwner(owner);
             newSq = new Square{coords[0], coords[1], coords[2], coords[3], constructBoard[sq], newAc};
         } else if (constructBoard[sq] == SpecialType::Residence) {
             // constructBoard with custom inputs
             Residence *newRes = new Residence(sq);
+            newRes->setOwner(owner);
             newSq = new Square{coords[0], coords[1], coords[2], coords[3], constructBoard[sq], newRes};
         } else if (constructBoard[sq] == SpecialType::Gym) {
             // constructBoard with custom inputs
             Gym *newGym = new Gym(sq);
+            newGym->setOwner(owner);
             newSq = new Square(coords[0], coords[1], coords[2], coords[3], constructBoard[sq], newGym);
         }
         delete this->squares[ind];
@@ -437,6 +438,42 @@ void theBoard::save(string file) {
 }
 
 void theBoard::trade(Player* cur, Player *other, string give, string receive) {
+}
+
+void theBoard::mortgage(Player* cur, string b) {
+    int buildingSquare = getInd(squareOrder, b);
+    if (buildingSquare == -1) {
+        cout << "Building not found" << endl;
+        return;
+    }
+    Building* building = squares[buildingSquare]->getBuilding();
+    if (building->getImprovements() != 0) {
+        cout << "Buildings with Improvements cannot be mortgaged, please sell all Improvements first" << endl;
+    } else if (!building->checkOwner(cur)) {
+        cout << "You do not own this Building." << endl;
+    } else {
+        building->mortgaged = true;
+        cur->money += building->getCost() * 0.5;
+    }
+}
+
+void theBoard::unmortgage(Player* cur, string b) {
+    int buildingSquare = getInd(squareOrder, b);
+    if (buildingSquare == -1) {
+        cout << "Building not found" << endl;
+        return;
+    }
+    Building* building = squares[buildingSquare]->getBuilding();
+    if (!building->checkOwner(cur)) {
+        cout << "You do not own this Building." << endl;
+    } else if (!building->mortgaged) {
+        cout << "This Building is not mortgaged." << endl;
+    } else if (building->getCost() * 0.6 > cur->money) {
+        cout << "You do not have enough money to unmortgage this Building." << endl;
+    } else {
+        building->mortgaged = false;
+        cur->money -= building->getCost() * 0.6;
+    }
 }
 
 ostream &operator<<(ostream &out, const theBoard &b) {

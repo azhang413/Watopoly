@@ -36,6 +36,10 @@ string Building::getOwner() const {
     return this->owner->name;
 }
 
+int Building::getCost() {
+    return this->cost;
+}
+
 // Academic
 
 // 2 maps:
@@ -120,6 +124,10 @@ map<string, vector<int>> improveMap = {
     {"MC", {35, 175, 500,1100,1300,1500}},
     {"DC", {50, 200, 600,1400,1700,2000}}
 };
+
+int Building::nameToMono(string name) {
+    return construct[name][0];
+}
 
 void Academic::buyImprovements(int numOfImprovements) { // board checks monopoly
     if ((improvements + numOfImprovements) > 5) {

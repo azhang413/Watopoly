@@ -27,6 +27,8 @@ class theBoard {
         Building* move(Player* p, int steps);
         void save(std::string file);
         void trade(Player* cur, Player* other, std::string give, std::string receive);
+        void mortgage(Player* cur, std::string b);
+        void unmortgage(Player* cur, std::string b);
         ~theBoard() { delete td; }
         // void move(Player *p, int steps);
         friend std::ostream &operator<<(std::ostream &out, const theBoard &b);

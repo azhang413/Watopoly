@@ -1,4 +1,5 @@
 #include "player.h"
+#include "building.h"
 #include <vector>
 using namespace std;
 
@@ -23,3 +24,27 @@ Player::Player(string name,
                 this->acb = vector<vector<Academic*>>(8);
                }
 
+bool Player::removeBuilding(Building* b) {
+    bool found = false;
+    for (size_t i = 0; i < acb.size(); ++i) {
+        for (auto ac = acb[i].begin(); ac != acb[i].end(); ++ac) {
+            if (*ac == b) {
+                found = true;
+                acb[i].erase(ac);
+            }
+        }
+    }
+    for (auto res = resb.begin(); res != resb.end(); ++res) {
+        if (*res == b) {
+            found = true;
+            resb.erase(res);
+        }
+    }
+    for (auto gym = gymb.begin(); gym != gymb.end(); ++gym) {
+        if (*gym == b) {
+            found = true;
+            gymb.erase(gym);
+        }
+    }
+    return found;
+}

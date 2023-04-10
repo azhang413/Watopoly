@@ -6,6 +6,7 @@
 class Academic;
 class Residence;
 class Gym;
+class Building;
 
 struct Player {
     const std::string name;
@@ -26,6 +27,7 @@ struct Player {
            int timCups,
            char p, 
            int place);
+    bool removeBuilding(Building* b);
 };
 
 #endif
