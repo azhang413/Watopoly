@@ -16,9 +16,9 @@ UWP BANK 0
 LHI BANK 0
 BMH BANK 0
 OPT BANK 0
-EV1 Isaac 1
+EV1 Isaac 0
 EV2 Isaac 1
-EV3 Isaac 2
+EV3 Isaac 5
 V1 Rahel 0
 PHYS BANK 0
 B1 Rahel 0
