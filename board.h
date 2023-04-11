@@ -18,13 +18,20 @@ class theBoard {
     std::vector<Player*> players;
     Player* bank;
     Display *td;
-    void auction(Building *b);
     std::vector<int> calcCoords(int order);
+    void collectOsap(Player* cur);
+    void goTims(Player* cur);
+    void gooseNest(Player* cur);
+    void tuition(Player* cur);
+    void coopFee(Player* cur);
+    void SLC(Player* cur);
+    void NH(Player* cur);
+    void rollTheRim(Player* cur);
     public:
         theBoard(std::vector<Player*> players);
         void init();
         void init(const std::string& name, int numPlayers);
-        Building* move(Player* p, int steps);
+        Square* move(Player* p, int steps);
         void save(std::string file);
         void trade(Player* cur, Player* other, std::string give, std::string receive);
         void mortgage(Player* cur, std::string b);
@@ -33,6 +40,7 @@ class theBoard {
         void buyImprovements(Player* cur, std::string building);
         void sellImprovements(Player* cur, std::string building);
         void all();
+        void auction(Building *b);
         void bankrupt(Player* cur, Player* owed);
         ~theBoard() { delete td; }
         // void move(Player *p, int steps)

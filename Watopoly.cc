@@ -158,7 +158,7 @@ int main(int argc, char* argv[]) {
         string cmd;
         Player* cur = players[curTurn];
         while (true) {
-            Building* landed;
+            Square* landed;
             cout << cur->name << " it's your turn!" << endl;
             cout << "Available Commands: " << endl;
             for (auto it = cmds.begin(); it != cmds.end(); ++it) {

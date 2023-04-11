@@ -205,6 +205,10 @@ int Academic::getCharge() const {
     return tuition;
 }
 
+int Academic::getImprovementCosts() {
+    return improveCost;
+}
+
 
 
 // Residences
