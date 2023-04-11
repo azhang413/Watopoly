@@ -19,14 +19,6 @@ class theBoard {
     Player* bank;
     Display *td;
     std::vector<int> calcCoords(int order);
-    void collectOsap(Player* cur);
-    void goTims(Player* cur);
-    void gooseNest(Player* cur);
-    void tuition(Player* cur);
-    void coopFee(Player* cur);
-    void SLC(Player* cur);
-    void NH(Player* cur);
-    void rollTheRim(Player* cur);
     public:
         theBoard(std::vector<Player*> players);
         void init();
@@ -40,10 +32,17 @@ class theBoard {
         void buyImprovements(Player* cur, std::string building);
         void sellImprovements(Player* cur, std::string building);
         void all();
-        void auction(Building *b);
-        void bankrupt(Player* cur, Player* owed);
+        void auction(Building* b);
+        void bankrupt(Player* cur, std::string owedName);
         ~theBoard() { delete td; }
-        // void move(Player *p, int steps)
+        void collectOsap(Player* cur);
+        void goTims(Player* cur);
+        void gooseNest(Player* cur);
+        void tuition(Player* cur);
+        void coopFee(Player* cur);
+        void SLC(Player* cur);
+        void NH(Player* cur);
+        void rollTheRim(Player* cur);
         void auction(std::string name);
         friend std::ostream &operator<<(std::ostream &out, const theBoard &b);
 };

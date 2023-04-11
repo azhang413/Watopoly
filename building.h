@@ -40,7 +40,7 @@ class Building { // abstract superclass
         virtual void buyImprovements(int numOfImprovements);
         virtual void sellImprovements(int numOfImprovements);
         virtual bool checkMonopoly() const;
-        virtual int getImprovementCosts() { return 0 };
+        virtual int getImprovementCosts() { return 0; }
 };
 
 class Academic : public Building {

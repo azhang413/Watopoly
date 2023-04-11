@@ -15,7 +15,7 @@ struct Player {
     int timsCups;
     const char p;
     int place;
-    Player* lastpayed = nullptr;
+    std::string lastpayed;
     std::vector<std::vector<Academic*>> acb;
     std::vector<Residence*> resb;
     std::vector<Gym*> gymb;
