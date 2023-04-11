@@ -10,11 +10,11 @@ class Building;
 
 struct Player {
     const std::string name;
-    int money;
+    int money; 
     int square;
     int timsCups;
-    const char p;
-    int place;
+    const char p; // piece
+    int place; // place in DC Tims line
     std::vector<std::vector<Academic*>> acb;
     std::vector<Residence*> resb;
     std::vector<Gym*> gymb;
