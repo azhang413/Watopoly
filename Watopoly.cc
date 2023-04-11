@@ -156,7 +156,7 @@ int main(int argc, char* argv[]) {
         string cmd;
         Player* cur = players[curTurn];
         while (true) {
-            Building* landed;
+            Square* landed;
             cout << cur->name << " it's your turn!" << endl;
             cout << "Available Commands: " << endl;
             for (auto it = cmds.begin(); it != cmds.end(); ++it) {
@@ -192,6 +192,14 @@ int main(int argc, char* argv[]) {
                 board.assets(cur);
             } else if (cmd == "all") {
                 board.all();
+            } else if (cmd == "mortgage") {
+                string b;
+                cin >> b;
+                board.mortgage(cur, b);
+            } else if (cmd == "unmortgage") {
+                string b;
+                cin >> b;
+                board.unmortgage(cur, b);
             }
         }
         cout << board;

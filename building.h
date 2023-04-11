@@ -40,6 +40,7 @@ class Building { // abstract superclass
         virtual void buyImprovements(int numOfImprovements);
         virtual void sellImprovements(int numOfImprovements);
         virtual bool checkMonopoly() const;
+        virtual int getImprovementCosts() { return 0 };
 };
 
 class Academic : public Building {
@@ -57,6 +58,7 @@ class Academic : public Building {
         bool checkMonopoly() const override;
         void buyImprovements(int numOfImprovements) override;
         void sellImprovements(int numOfImprovements) override;
+        int getImprovementCosts() override;
         ~Academic() override;
 };
 
