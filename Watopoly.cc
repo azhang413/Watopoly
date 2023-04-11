@@ -153,7 +153,6 @@ int main(int argc, char* argv[]) {
         };
         string cmd;
         Player* cur = players[curTurn];
-
         // check DC Tims Line (update commands)
 
         if (cur->square == 10 && cur->place != 0) { // at dc tims line 
@@ -165,7 +164,6 @@ int main(int argc, char* argv[]) {
         }
 
         cout << cur->name << " it's your turn!" << endl;
-
 
         while (true) { // loop for current player
             Building* landed;

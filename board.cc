@@ -415,11 +415,11 @@ void theBoard::init() {
     this->squares[0]->notifyObservers();
 }
 
-Building* theBoard::move(Player* p, int steps) {
+Square* theBoard::move(Player* p, int steps) {
     squares[p->square]->removePlayer(p);
     p->square += steps;
     squares[p->square]->addPlayer(p);
-    return squares[p->square]->getBuilding();
+    return squares[p->square];
 }
 
 void theBoard::buyImprovements(Player* cur, string building) {
@@ -877,6 +877,72 @@ void theBoard::all() {
     }
 }
 
+ostream &operator<<(ostream &out, const theBoard &b) {
+    out << *b.td;
+    return out;
+}
+
+void theBoard::auction(string name) {
+    int ind = getInd(squareOrder, name);
+    Building *b = squares[ind]->getBuilding();
+    int bid = 0;
+    int tmp;
+    int size = players.size();
+    Player *winner = players[0];
+    vector<Player *> bidders;
+    for (auto plyr : players) { 
+        bidders.emplace_back(plyr);
+    }
+    while (size > 1) {
+        for (auto i = bidders.begin(); i != bidders.end(); ++i) {
+            bool remove = false;
+            try {
+                while (true) {
+                    cout << "Current bid is : $" << bid << endl;
+                    cout << "Player " << (*i)->name << ", enter your bid as an integer between 0 and " << (*i)->money << endl;
+                    string s;
+                    cin >> s;
+                    if (cin.eof()) {
+                        throw runtime_error("EOF reached");
+                        break;
+                    } 
+
+                    stringstream iss{s};
+                    if (!(iss >> tmp)) {
+                        cout << "Invalid Bid, please enter a valid integer." << endl;
+                        continue;
+                    }
+                    // tmp is valid int;
+                    if (tmp >= (*i)->money || tmp < 0) {
+                        cout << "Insufficient Balance or Amount. Please Try Again." << endl;
+                       continue;
+                    } 
+                    if (tmp > bid) {
+                        bid = tmp;
+                    } else if (tmp <= bid) {
+                        remove = true;
+                    }
+                    break;
+                }
+            } catch (const exception &e) {
+                cout << "Invalid Behaviour. Exiting program..." << endl;
+                exit(0);
+            }
+
+            if (remove) {
+                bidders.erase(i);
+                i--;
+                size--;
+            }
+            if (size == 1) { break; }
+        }
+    }
+    winner = bidders[0];
+    cout << "Player " << winner->name << " won the bid!" << endl;
+    winner->money -= bid;
+    b->setOwner(winner);
+}
+
 /* void theBoard::bankrupt(Player* cur, Player* owed) {
     // if possible replace the money exchanges with charge functions
     if (owed == bank) {
@@ -951,70 +1017,119 @@ void theBoard::all() {
     }
 } */
 
-ostream &operator<<(ostream &out, const theBoard &b) {
-    out << *b.td;
-    return out;
+void theBoard::collectOsap(Player* cur) {
+    cur->money += 200;
 }
 
-void theBoard::auction(string name) {
-    int ind = getInd(squareOrder, name);
-    Building *b = squares[ind]->getBuilding();
-    int bid = 0;
-    int tmp;
-    int size = players.size();
-    Player *winner = players[0];
-    vector<Player *> bidders;
-    for (auto plyr : players) { 
-        bidders.emplace_back(plyr);
-    }
-    while (size > 1) {
-        for (auto i = bidders.begin(); i != bidders.end(); ++i) {
-            bool remove = false;
-            try {
-                while (true) {
-                    cout << "Current bid is : $" << bid << endl;
-                    cout << "Player " << (*i)->name << ", enter your bid as an integer between 0 and " << (*i)->money << endl;
-                    string s;
-                    cin >> s;
-                    if (cin.eof()) {
-                        throw runtime_error("EOF reached");
-                        break;
-                    } 
+void theBoard::goTims(Player* cur) {
+    cur->square = 10;
+    squares[10]->addPlayer(cur);
+    cur->place = 3;
+}
 
-                    stringstream iss{s};
-                    if (!(iss >> tmp)) {
-                        cout << "Invalid Bid, please enter a valid integer." << endl;
-                        continue;
-                    }
-                    // tmp is valid int;
-                    if (tmp >= (*i)->money || tmp < 0) {
-                        cout << "Insufficient Balance or Amount. Please Try Again." << endl;
-                       continue;
-                    } 
-                    if (tmp > bid) {
-                        bid = tmp;
-                    } else if (tmp <= bid) {
-                        remove = true;
-                    }
-                    break;
-                }
-            } catch (const exception &e) {
-                cout << "Invalid Behaviour. Exiting program..." << endl;
-                exit(0);
-            }
+void theBoard::gooseNest(Player* cur) {
+    cout << "Zoinks! You were attacked by the Geese..." << endl;
+}
 
-            if (remove) {
-                bidders.erase(i);
-                i--;
-                size--;
+void theBoard::tuition(Player* cur) {
+    cout << "Pay $300 or 10% of your worth? {300 / 10}" << endl;
+    string choice;
+    cin >> choice;
+    if (choice == "300") {
+        cur->money -= 300;
+    } else if (choice == "10") {
+        int fee = cur->money * 0.1;
+        for (size_t i = 0; i < cur->acb.size(); ++i) {
+            for (auto ac : cur->acb[i]) {
+                fee += ac->getCost() + ac->getImprovementCosts() * ac->getImprovements() * 0.1;
             }
-            if (size == 1) { break; }
         }
+        for (auto res : cur->resb) {
+            fee += res->getCost() * 0.1;
+        }
+        for (auto gym : cur->gymb) {
+            fee += gym->getCost() * 0.1;
+        }
+        cur->money -= fee;
     }
-    winner = bidders[0];
-    cout << "Player " << winner->name << " won the bid!" << endl;
-    winner->money -= bid;
-    b->setOwner(winner);
 }
 
+void theBoard::coopFee(Player* cur) {
+    cur->money -= 150;
+    cur->lastpayed = bank;
+}
 
+void theBoard::SLC(Player* cur) {
+    vector<int> probs{0,0,0,1,1,1,1,2,2,2,2,3,3,3,4,4,4,4,5,5,5,5,6,7};
+    Shuffle slc(probs);
+    int result = slc.roll();
+    switch (result) {
+        case 0:
+            this->move(cur, -3);
+            break;
+        case 1:
+            this->move(cur, -2);
+            break;
+        case 2:
+            this->move(cur, -1);
+            break;
+        case 3:
+            this->move(cur, 1);
+            break;
+        case 4:
+            this->move(cur, 2);
+            break;
+        case 5:
+            this->move(cur, 3);
+            break;
+        case 6:
+            cur->square = 9;
+            squares[9]->addPlayer(cur);
+            Square* b = this->move(cur, 1);
+            break;
+        case 7:
+            cur->square = 39;
+            squares[39]->addPlayer()
+            Square* b = this->move(cur, 1);
+            break;
+    }
+}
+
+void theBoard::NH(Player* cur) {
+    vector<int> probs = {0,1,1,2,2,2,3,3,3,3,3,3,4,4,4,5,5,6};
+    Shuffle nh{probs};
+    int result = nh.roll();
+    switch (result) {
+        case 0:
+            cur->money -= 200;
+            break;
+        case 1:
+            cur->money -= 100;
+            break;
+        case 2:
+            cur->money -= 50;
+            break;
+        case 3:
+            cur->money += 25;
+            break;
+        case 4:
+            cur->money += 50;
+            break;
+        case 5:
+            cur->money += 100;
+            break;
+        case 6:
+            cur->money += 200;
+            break;
+    }
+}
+
+void theBoard::rollTheRim(Player* cur) {
+    vector<int> probs(99, 0);
+    probs.push_back(1);
+    Shuffle rim{probs};
+    int result = rim.roll();
+    if (result == 1) {
+        cur->timsCups++;
+    }
+}
