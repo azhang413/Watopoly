@@ -10,7 +10,7 @@ class Building;
 
 struct Player {
     const std::string name;
-    int money;
+    int money; 
     int square;
     int timsCups;
     const char p;

@@ -120,26 +120,7 @@ int main(int argc, char* argv[]) {
     } else {
         board.init();
     }
-    cout << board;
-    cout << " " << endl;
-    // start game
-    /*
-    Building* landedOn = board.move(players[0], 3);
-    board.save("out.txt");
-    board.assets(players[1]);
-    board.mortgage(players[1], "HH");
-    board.mortgage(players[0], "EV1");
-    board.mortgage(players[1], "PAC");
-    board.unmortgage(players[1], "HH");
-    board.unmortgage(players[1], "EV1");
-    */
-    board.all();
-    cout << " " << endl;
-    board.trade(players[0],players[1], "PAS", "PAC");
-    //board.unmortgage(players[1], "PAC");
-    board.all();
-    /*
-    */
+
     while (numPlayers > 1) {
         map<string, bool> cmds = {
             {"roll",true},
@@ -152,34 +133,70 @@ int main(int argc, char* argv[]) {
             {"assets",true},
             {"all",true},
             {"save",true},
-            {"pay",false}, // only for dc tims line
-            {"use",false} // only for dc tims line
+            {"payTims",false}, // only for dc tims line
+            {"useTims",false} // only for dc tims line
+        };
+
+        map<string, bool> bankruptcmds = {
+            {"roll",false},
+            {"next",false},
+            {"trade",true},
+            {"improve",true},
+            {"mortgage",true},
+            {"unmortgage",true},
+            {"bankrupt",true},
+            {"assets",true},
+            {"all",true},
+            {"save",true},
+            {"payTims",false}, // only for dc tims line
+            {"useTims",false} // only for dc tims line
         };
         string cmd;
         Player* cur = players[curTurn];
-        while (true) {
-            Square* landed;
-            cout << cur->name << " it's your turn!" << endl;
+        // check DC Tims Line (update commands)
+
+        if (cur->square == 10 && cur->place != 0) { // at dc tims line 
+            cmds["payTims"] = true;
+            // add useTims?
+            if (cur->timsCups > 0) {
+                cmds["useTims"] = true;
+            }
+        }
+
+        cout << cur->name << " it's your turn!" << endl;
+
+        while (true) { // loop for current player
+            Building* landed;
+            map<string, bool> ccc;
+            if (cur->money < 0) {
+                ccc = bankruptcmds;
+            } else {
+                ccc = cmds;
+            }
+
             cout << "Available Commands: " << endl;
-            for (auto it = cmds.begin(); it != cmds.end(); ++it) {
+            for (auto it = ccc.begin(); it != ccc.end(); ++it) {
                 if (it->second == true) {
                     cout << "<" << it->first << "> ";
                 }
             }
+            
             try {
                 while (true) {
                     cin >> cmd;
+                    bool valid = false;
                     if (cin.eof()) {
                         throw runtime_error("EOF reached");
                         break;
                     }
 
-                    for (auto it = cmds.begin(); it != cmds.end(); ++it) {
+                    for (auto it = ccc.begin(); it != ccc.end(); ++it) {
                         if (it->second == true && cmd == it->first) {
+                            valid = true;
                             break;
                         }
                     }
-
+                    if (valid) {break;}
                     cout << "Invalid Command. Please Try Again" << endl;
                 }
             } catch (const exception& e) {
@@ -199,12 +216,17 @@ int main(int argc, char* argv[]) {
                         cmds["next"] = true;
                         cur->place--;
                     }
+
+                    if (cur->place == 0 && cmds["roll"] == false) { // on last roll
+                        cmds["next"] = false;
+                    }
                 } else {
                     cur->place = 0;
                     landed = board.move(players[curTurn], dice1.roll() + dice2.roll());
                     cmds["roll"] = false;
                     cmds["next"] = true;
                 }
+                cout << board;
             } else if (cmd == "next") {
                 break;
             } else if (cmd == "save") {
@@ -232,6 +254,7 @@ int main(int argc, char* argv[]) {
                 string option;
                 try {
                     while (true) {
+                        cin >> option;
                         if (cin.eof()) {
                             throw runtime_error("EOF reached");
                             break;
@@ -294,29 +317,26 @@ int main(int argc, char* argv[]) {
                 cout << "Player To Trade With:" << endl;
                 Player * toTrade = nullptr;
                 string player;
+                bool isPlayer = false;
                 try {
                     cin >> player;
                     if (cin.eof()) {
                         throw runtime_error("EOF reached");
                     }
-                    bool isPlayer = false;
                     for (auto i : players) {
                         if (i->name == player) {
                             isPlayer = true;
                             toTrade = i;
                         }
-                    }
-
-                    if (!isPlayer) {
-                        cout << "Not a Valid Player. Please Try Again" << endl;
-                        return;
-                    }
-                    
+                    }              
                 } catch (const exception& e) {
                     cout << "Invalid Behaviour. Exiting program..." << endl;
                     exit(0);
                 }
-
+                if (!isPlayer) {
+                    cout << "Not a Valid Player. Please Try Again" << endl;
+                    continue;
+                }
 
                 // now we have player, prompt of strings
 
@@ -345,6 +365,10 @@ int main(int argc, char* argv[]) {
                 }
 
                 board.trade(players[curTurn],toTrade, give, receive);
+            } else if (cmd == "payTims") {
+                
+            } else if (cmd == "useTims") {
+                
             }
         }
         cout << board;
