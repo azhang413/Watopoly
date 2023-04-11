@@ -943,7 +943,7 @@ void theBoard::auction(string name) {
     b->setOwner(winner);
 }
 
-/* void theBoard::bankrupt(Player* cur, Player* owed) {
+void theBoard::bankrupt(Player* cur, Player* owed) {
     // if possible replace the money exchanges with charge functions
     if (owed == bank) {
         cur->money = 0;
@@ -1015,7 +1015,7 @@ void theBoard::auction(string name) {
             this->auction(gym);
         }
     }
-} */
+}
 
 void theBoard::collectOsap(Player* cur) {
     cur->money += 200;
@@ -1063,6 +1063,7 @@ void theBoard::SLC(Player* cur) {
     vector<int> probs{0,0,0,1,1,1,1,2,2,2,2,3,3,3,4,4,4,4,5,5,5,5,6,7};
     Shuffle slc(probs);
     int result = slc.roll();
+    Square *b;
     switch (result) {
         case 0:
             this->move(cur, -3);
@@ -1085,12 +1086,12 @@ void theBoard::SLC(Player* cur) {
         case 6:
             cur->square = 9;
             squares[9]->addPlayer(cur);
-            Square* b = this->move(cur, 1);
+            b = this->move(cur, 1);
             break;
         case 7:
             cur->square = 39;
-            squares[39]->addPlayer()
-            Square* b = this->move(cur, 1);
+            squares[39]->addPlayer(cur);
+            b = this->move(cur, 1);
             break;
     }
 }

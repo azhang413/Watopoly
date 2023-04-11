@@ -8,6 +8,8 @@
 #include "shuffle.h"
 #include "player.h"
 #include "board.h"
+#include "square.h"
+#include "building.h"
 
 using namespace std;
 
@@ -88,7 +90,6 @@ int main(int argc, char* argv[]) {
                             cont = true;
                             break;
                         }
-                    
                     }
 
                     if (cont) {
@@ -222,9 +223,49 @@ int main(int argc, char* argv[]) {
                     }
                 } else {
                     cur->place = 0;
-                    landed = board.move(players[curTurn], dice1.roll() + dice2.roll());
+                    int steps = dice1.roll() + dice2.roll();
+                    landed = board.move(players[curTurn], steps);
                     cmds["roll"] = false;
                     cmds["next"] = true;
+                    SpecialType st = landed->checkType();
+                    if (cur->square - steps < 0) {
+                        board.collectOsap(cur);
+                    }
+                    if (st == SpecialType::GoToTims) {
+                        board.goTims(cur);
+                    } else if (st == SpecialType::SLC) {
+                        board.SLC(cur);
+                    } else if (st == SpecialType::NH) {
+                        board.NH(cur);
+                    } else if (st == SpecialType::Goose) {
+                        board.gooseNest(cur);
+                    } else if (st == SpecialType::Tuition) {
+                        board.tuition(cur);
+                    } else if (st == SpecialType::Coop) {
+                        board.coopFee(cur);
+                    } else if (st == SpecialType::Residence || st == SpecialType::Gym || st == SpecialType::Academic) {
+                        int rent = landed->getBuilding()->getCharge();
+                        if (landed->getBuilding()->checkOwner(cur)) {
+                            continue;
+                        } else if (landed->getBuilding()->getOwner() == "BANK") {
+                            cout << "Would you like to buy this property? " << landed->getBuilding()->getName() << " {y / n}" << endl;
+                            string resp;
+                            cin >> resp;
+                            if (resp == "y") {
+                                cur->money -= landed->getBuilding()->getCost();
+                                landed->getBuilding()->setOwner(cur);
+                            } else {
+                                board.auction(landed->getBuilding());
+                            }
+                        } else {
+                            cur->money -= rent;
+                            for (auto p : players) {
+                                if (landed->getBuilding()->checkOwner(p)) {
+                                    p->money += rent;
+                                }
+                            }
+                        }
+                    }
                 }
                 cout << board;
             } else if (cmd == "next") {
@@ -276,9 +317,9 @@ int main(int argc, char* argv[]) {
                 // now valid input. 
 
                 if (option == "buy") {
-                    board.buyImprovements(players[curTurn], building);
+                    board.buyImprovements(cur, building);
                 } else if (option == "sell") {
-                    board.sellImprovements(players[curTurn], building);
+                    board.sellImprovements(cur, building);
                 }
 
             } else if (cmd == "mortgage") {
@@ -364,13 +405,18 @@ int main(int argc, char* argv[]) {
                     exit(0);
                 }
 
+<<<<<<< Updated upstream
                 board.trade(players[curTurn],toTrade, give, receive);
             } else if (cmd == "payTims") {
                 
             } else if (cmd == "useTims") {
                 
+=======
+                board.trade(cur, toTrade, give, receive);
+>>>>>>> Stashed changes
             }
         }
+
         cout << board;
         curTurn++;
         if (curTurn == numPlayers) curTurn = 0;
