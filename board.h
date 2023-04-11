@@ -33,6 +33,7 @@ class theBoard {
         void buyImprovements(Player* cur, std::string building);
         void sellImprovements(Player* cur, std::string building);
         void all();
+        void bankrupt(Player* cur, Player* owed);
         ~theBoard() { delete td; }
         // void move(Player *p, int steps)
         void auction(std::string name);

@@ -151,7 +151,9 @@ int main(int argc, char* argv[]) {
             {"bankrupt",false},
             {"assets",true},
             {"all",true},
-            {"save",true}
+            {"save",true},
+            {"pay",false}, // only for dc tims line
+            {"use",false} // only for dc tims line
         };
         string cmd;
         Player* cur = players[curTurn];
@@ -164,13 +166,34 @@ int main(int argc, char* argv[]) {
                     cout << "<" << it->first << "> ";
                 }
             }
-            cin >> cmd;
+            try {
+                while (true) {
+                    cin >> cmd;
+                    if (cin.eof()) {
+                        throw runtime_error("EOF reached");
+                        break;
+                    }
+
+                    for (auto it = cmds.begin(); it != cmds.end(); ++it) {
+                        if (it->second == true && cmd == it->first) {
+                            break;
+                        }
+                    }
+
+                    cout << "Invalid Command. Please Try Again" << endl;
+                }
+            } catch (const exception& e) {
+                cout << "Invalid Behaviour. Exiting program..." << endl;
+                exit(0);
+            }
+            
+            // cmd is now a valid and available command
             if (cmd == "roll") {
-                if (cur->square == 10 && cur->place != 0) {
-                    if (dice1.roll() == dice2.roll()) {
+                if (cur->square == 10 && cur->place != 0) { // player is at tims line
+                    if (dice1.roll() == dice2.roll()) { // if roll double, exit. 
                         cout << "Double! roll again to move." << endl;
                         cur->place = 0;
-                    } else {
+                    } else { // don't move? 
                         cout << "Not a double, try again next turn." << endl;
                         cmds["roll"] = false;
                         cmds["next"] = true;
@@ -192,6 +215,136 @@ int main(int argc, char* argv[]) {
                 board.assets(cur);
             } else if (cmd == "all") {
                 board.all();
+            } else if (cmd == "improve") {
+                cout << "Building to Improve:" << endl;
+                string building;
+                try {
+                    cin >> building;
+                    if (cin.eof()) {
+                        throw runtime_error("EOF reached");
+                    }
+
+                } catch (const exception& e) {
+                    cout << "Invalid Behaviour. Exiting program..." << endl;
+                    exit(0);
+                }
+                cout << "Buy or Sell Improvements (enter 'buy' or 'sell')" << endl;
+                string option;
+                try {
+                    while (true) {
+                        if (cin.eof()) {
+                            throw runtime_error("EOF reached");
+                            break;
+                        }
+
+                        if (option != "buy" && option != "sell") {
+                            cout << "Please Enter Either 'buy' or 'sell'" << endl;
+                        } else {
+                            break;
+                        }
+                    }
+                    
+                    
+                } catch (const exception& e) {
+                    cout << "Invalid Behaviour. Exiting program..." << endl;
+                    exit(0);
+                }
+
+                // now valid input. 
+
+                if (option == "buy") {
+                    board.buyImprovements(players[curTurn], building);
+                } else if (option == "sell") {
+                    board.sellImprovements(players[curTurn], building);
+                }
+
+            } else if (cmd == "mortgage") {
+                cout << "Building to Mortgage:" << endl;
+                string building;
+                try {
+                    cin >> building;
+                    if (cin.eof()) {
+                        throw runtime_error("EOF reached");
+                    }
+
+                } catch (const exception& e) {
+                    cout << "Invalid Behaviour. Exiting program..." << endl;
+                    exit(0);
+                }
+
+                board.mortgage(players[curTurn], building);
+
+
+            } else if (cmd == "unmortgage") {
+                cout << "Building to Unmortgage:" << endl;
+                string building;
+                try {
+                    cin >> building;
+                    if (cin.eof()) {
+                        throw runtime_error("EOF reached");
+                    }
+
+                } catch (const exception& e) {
+                    cout << "Invalid Behaviour. Exiting program..." << endl;
+                    exit(0);
+                }
+
+                board.unmortgage(players[curTurn], building);
+            } else if (cmd == "trade") {
+                cout << "Player To Trade With:" << endl;
+                Player * toTrade = nullptr;
+                string player;
+                try {
+                    cin >> player;
+                    if (cin.eof()) {
+                        throw runtime_error("EOF reached");
+                    }
+                    bool isPlayer = false;
+                    for (auto i : players) {
+                        if (i->name == player) {
+                            isPlayer = true;
+                            toTrade = i;
+                        }
+                    }
+
+                    if (!isPlayer) {
+                        cout << "Not a Valid Player. Please Try Again" << endl;
+                        return;
+                    }
+                    
+                } catch (const exception& e) {
+                    cout << "Invalid Behaviour. Exiting program..." << endl;
+                    exit(0);
+                }
+
+
+                // now we have player, prompt of strings
+
+                cout << "What Are You Offering?" << endl;
+                string give;
+                try {
+                    cin >> give;
+                    if (cin.eof()) {
+                        throw runtime_error("EOF reached");
+                    }
+                } catch (const exception& e) {
+                    cout << "Invalid Behaviour. Exiting program..." << endl;
+                    exit(0);
+                }
+
+                cout << "What Are You Receiving?" << endl;
+                string receive;
+                try {
+                    cin >> receive;
+                    if (cin.eof()) {
+                        throw runtime_error("EOF reached");
+                    }
+                } catch (const exception& e) {
+                    cout << "Invalid Behaviour. Exiting program..." << endl;
+                    exit(0);
+                }
+
+                board.trade(players[curTurn],toTrade, give, receive);
             }
         }
         cout << board;
