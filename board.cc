@@ -818,6 +818,7 @@ void theBoard::trade(Player* cur, Player *other, string give, string receive) {
 
 void theBoard::mortgage(Player* cur, string b) {
     int buildingSquare = getInd(squareOrder, b);
+    cur->lastpayed = "BANK";
     if (buildingSquare == -1) {
         cout << "Building not found" << endl;
         return;
@@ -835,6 +836,7 @@ void theBoard::mortgage(Player* cur, string b) {
 
 void theBoard::unmortgage(Player* cur, string b) {
     int buildingSquare = getInd(squareOrder, b);
+    cur->lastpayed = "BANK";
     if (buildingSquare == -1) {
         cout << "Building not found" << endl;
         return;
@@ -882,9 +884,9 @@ ostream &operator<<(ostream &out, const theBoard &b) {
     return out;
 }
 
-void theBoard::auction(string name) {
-    int ind = getInd(squareOrder, name);
-    Building *b = squares[ind]->getBuilding();
+void theBoard::auction(Building* b) {
+    //int ind = getInd(squareOrder, name);
+    //Building *b = squares[ind]->getBuilding();
     int bid = 0;
     int tmp;
     int size = players.size();
@@ -913,7 +915,7 @@ void theBoard::auction(string name) {
                         continue;
                     }
                     // tmp is valid int;
-                    if (tmp >= (*i)->money || tmp < 0) {
+                    if (tmp > (*i)->money || tmp < 0) {
                         cout << "Insufficient Balance or Amount. Please Try Again." << endl;
                        continue;
                     } 
@@ -940,12 +942,20 @@ void theBoard::auction(string name) {
     winner = bidders[0];
     cout << "Player " << winner->name << " won the bid!" << endl;
     winner->money -= bid;
+    winner->lastpayed = "BANK";
     b->setOwner(winner);
 }
 
-void theBoard::bankrupt(Player* cur, Player* owed) {
+void theBoard::bankrupt(Player* cur, string owedName) {
     // if possible replace the money exchanges with charge functions
-    if (owed == bank) {
+    Player* owed;
+    for (auto p = players.begin(); p < players.end(); ++p) {
+        if (*p == cur) {
+            players.erase(p);
+            break;
+        }
+    }
+    if (owedName == "BANK") {
         cur->money = 0;
         for (size_t i = 0; i < cur->acb.size(); ++i) {
             for (auto ac : cur->acb[i]) {
@@ -965,6 +975,11 @@ void theBoard::bankrupt(Player* cur, Player* owed) {
             this->auction(gym);
         }
     } else {
+        for (auto p : players) {
+            if (p->name == owedName) {
+                owed = p;
+            }
+        }
         owed->money += cur->money;
         cur->money = 0;
         for (size_t i = 0; i < cur->acb.size(); ++i) {
@@ -1037,6 +1052,7 @@ void theBoard::tuition(Player* cur) {
     cin >> choice;
     if (choice == "300") {
         cur->money -= 300;
+        cur->lastpayed = "BANK";
     } else if (choice == "10") {
         int fee = cur->money * 0.1;
         for (size_t i = 0; i < cur->acb.size(); ++i) {
@@ -1051,12 +1067,13 @@ void theBoard::tuition(Player* cur) {
             fee += gym->getCost() * 0.1;
         }
         cur->money -= fee;
+        cur->lastpayed = "BANK";
     }
 }
 
 void theBoard::coopFee(Player* cur) {
     cur->money -= 150;
-    cur->lastpayed = bank;
+    cur->lastpayed = "BANK";
 }
 
 void theBoard::SLC(Player* cur) {
@@ -1100,6 +1117,7 @@ void theBoard::NH(Player* cur) {
     vector<int> probs = {0,1,1,2,2,2,3,3,3,3,3,3,4,4,4,5,5,6};
     Shuffle nh{probs};
     int result = nh.roll();
+    cur->lastpayed = "BANK";
     switch (result) {
         case 0:
             cur->money -= 200;

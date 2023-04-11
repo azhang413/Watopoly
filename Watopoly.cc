@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
     vector<int> diceVec{1,2,3,4,5,6};
     Shuffle dice1{diceVec};
     Shuffle dice2{diceVec};
+    bool testing = false;
 
     // setup game
     if (argv[1] == True) {
@@ -111,7 +112,8 @@ int main(int argc, char* argv[]) {
 
     if (argv[3] == True) {
         // turn on testing mode
-        cout << "testing" << endl;
+        cout << "testing mode on" << endl;
+        testing = true;
     }
 
     theBoard board{players};
@@ -167,7 +169,7 @@ int main(int argc, char* argv[]) {
         cout << cur->name << " it's your turn!" << endl;
 
         while (true) { // loop for current player
-            Building* landed;
+            Square* landed;
             map<string, bool> ccc;
             if (cur->money < 0) {
                 ccc = bankruptcmds;
@@ -207,8 +209,31 @@ int main(int argc, char* argv[]) {
             
             // cmd is now a valid and available command
             if (cmd == "roll") {
+                int d1;
+                int d2;
+                if (testing) {
+                    string sd1;
+                    cin >> sd1;   
+                    string sd2;
+                    cin >> sd2;
+                    if (isdigit(sd1[0])) {
+                        d1 = stoi(sd1);
+                    } else {
+                        cout << "Invalid Command. Please Try Again" << endl;
+                        continue;
+                    }
+                    if (isdigit(sd2[0])) {
+                        d2 = stoi(sd2);
+                    } else {
+                        cout << "Invalid Command. Please Try Again" << endl;
+                        continue;    
+                    }
+                } else {
+                    d1 = dice1.roll();
+                    d2 = dice2.roll();
+                }
                 if (cur->square == 10 && cur->place != 0) { // player is at tims line
-                    if (dice1.roll() == dice2.roll()) { // if roll double, exit. 
+                    if (d1 == d2) { // if roll double, exit. 
                         cout << "Double! roll again to move." << endl;
                         cur->place = 0;
                     } else { // don't move? 
@@ -223,7 +248,7 @@ int main(int argc, char* argv[]) {
                     }
                 } else {
                     cur->place = 0;
-                    int steps = dice1.roll() + dice2.roll();
+                    int steps = d1 + d2;
                     landed = board.move(players[curTurn], steps);
                     cmds["roll"] = false;
                     cmds["next"] = true;
@@ -253,12 +278,14 @@ int main(int argc, char* argv[]) {
                             cin >> resp;
                             if (resp == "y") {
                                 cur->money -= landed->getBuilding()->getCost();
+                                cur->lastpayed = landed->getBuilding()->getOwner();;
                                 landed->getBuilding()->setOwner(cur);
                             } else {
                                 board.auction(landed->getBuilding());
                             }
                         } else {
                             cur->money -= rent;
+                            cur->lastpayed = landed->getBuilding()->getOwner();
                             for (auto p : players) {
                                 if (landed->getBuilding()->checkOwner(p)) {
                                     p->money += rent;
@@ -405,18 +432,20 @@ int main(int argc, char* argv[]) {
                     exit(0);
                 }
 
-<<<<<<< Updated upstream
-                board.trade(players[curTurn],toTrade, give, receive);
-            } else if (cmd == "payTims") {
-                
-            } else if (cmd == "useTims") {
-                
-=======
                 board.trade(cur, toTrade, give, receive);
->>>>>>> Stashed changes
+            } else if (cmd == "payTims") {
+                cur->money -= 50;
+                cur->lastpayed = "BANK";
+                cur->place = 0;
+                cmds["roll"] = true;
+            } else if (cmd == "useTims") {
+                cur->timsCups--;
+                cur->place = 0;
+                cmds["roll"] = true;
+            } else if (cmd == "bankrupt") {
+                board.bankrupt(cur, cur->lastpayed);
             }
         }
-
         cout << board;
         curTurn++;
         if (curTurn == numPlayers) curTurn = 0;
